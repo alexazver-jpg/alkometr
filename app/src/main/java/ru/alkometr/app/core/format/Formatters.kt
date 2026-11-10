@@ -47,6 +47,7 @@ object Formatters {
     /** Давность порции: «−1 ч 20 мин» для прошлого, «+15 мин» для будущего. */
     fun formatAge(atMillis: Long, nowMillis: Long): String {
         val diff = nowMillis - atMillis
+        if (diff in -60_000L..60_000L) return "только что"
         if (diff >= 0) return "−${formatDuration(diff)}"
         return "+${formatDuration(-diff)}"
     }

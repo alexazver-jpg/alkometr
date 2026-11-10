@@ -26,6 +26,9 @@ private val Context.drinksStore: DataStore<Preferences> by preferencesDataStore(
 class DrinksRepository(private val context: Context) {
 
     private val key = stringPreferencesKey("drinks_json")
+
+    /** Сюда переносится JSON, который не удалось разобрать, чтобы он не пропал при следующей записи. */
+    private val unreadableKey = stringPreferencesKey("drinks_json_unreadable")
     private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true }
     private val serializer = ListSerializer(Drink.serializer())
 
@@ -34,11 +37,14 @@ class DrinksRepository(private val context: Context) {
             if (error is IOException) emit(emptyPreferences()) else throw error
         }
         .map { preferences ->
-            val raw = preferences[key] ?: return@map emptyList()
-            runCatching { json.decodeFromString(serializer, raw) }
-                .getOrElse { emptyList() }
-                .sortedBy { it.atMillis }
+            preferences[key]?.let(::decode) ?: emptyList()
         }
+
+    /** null — если JSON не читается (повреждён или записан несовместимой версией). */
+    private fun decode(raw: String): List<Drink>? =
+        runCatching { json.decodeFromString(serializer, raw) }
+            .getOrNull()
+            ?.sortedBy { it.atMillis }
 
     suspend fun current(): List<Drink> = drinks.first()
 
@@ -48,16 +54,30 @@ class DrinksRepository(private val context: Context) {
         }
     }
 
+    /**
+     * Читает, меняет и пишет список внутри одной транзакции DataStore:
+     * параллельные add/delete/update выстраиваются в очередь и не затирают друг друга.
+     */
+    private suspend fun mutate(transform: (List<Drink>) -> List<Drink>) {
+        context.drinksStore.edit { preferences ->
+            val raw = preferences[key]
+            val stored = raw?.let(::decode)
+            if (raw != null && stored == null) preferences[unreadableKey] = raw
+            val updated = transform(stored ?: emptyList()).sortedBy { it.atMillis }
+            preferences[key] = json.encodeToString(serializer, updated)
+        }
+    }
+
     suspend fun add(drink: Drink) {
-        save(current() + drink)
+        mutate { it + drink }
     }
 
     suspend fun delete(id: String) {
-        save(current().filterNot { it.id == id })
+        mutate { list -> list.filterNot { it.id == id } }
     }
 
     suspend fun update(drink: Drink) {
-        save(current().map { if (it.id == drink.id) drink else it })
+        mutate { list -> list.map { if (it.id == drink.id) drink else it } }
     }
 
     suspend fun clear() {

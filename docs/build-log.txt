@@ -31,10 +31,7 @@
 > Task :app:validateSigningDebug UP-TO-DATE
 > Task :app:writeDebugAppMetadata UP-TO-DATE
 > Task :app:writeDebugSigningConfigVersions UP-TO-DATE
-
 > Task :app:compileDebugKotlin
-w: file:///C:/Users/user/AppData/Roaming/AutoClaw-oversea-official/accounts/6661d600f597f616562ec1e0f34de23e3ca7f708dea2755cf1d8e17088b60bb3/projects/Default/alkometr/app/src/main/java/ru/alkometr/app/ui/onboarding/OnboardingScreen.kt:63:23 Condition is always 'true'.
-
 > Task :app:compileDebugJavaWithJavac NO-SOURCE
 > Task :app:compressDebugJavaRes UP-TO-DATE
 > Task :app:mergeDebugJavaResource UP-TO-DATE

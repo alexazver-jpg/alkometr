@@ -1,6 +1,7 @@
 package ru.alkometr.app.ui.main
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -40,6 +41,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
@@ -78,6 +81,7 @@ fun MainScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val haptics = LocalHapticFeedback.current
     val units = state.settings.units
+    val thresholdColor = MaterialTheme.colorScheme.error
 
     var menuOpen by remember { mutableStateOf(false) }
     var customDialog by remember { mutableStateOf(false) }
@@ -85,6 +89,16 @@ fun MainScreen(
     var confirmClear by remember { mutableStateOf(false) }
 
     val lastAdded = state.drinks.firstOrNull { it.id == state.lastAddedId }
+    val firstDrinkAt = state.drinks.minOfOrNull { it.atMillis }
+    val viewStartMillis = if (firstDrinkAt == null) {
+        state.nowMillis - 6 * 60 * 60 * 1000L
+    } else {
+        minOf(firstDrinkAt - 30 * 60 * 1000L, state.nowMillis - 6 * 60 * 60 * 1000L)
+    }
+    val viewEndMillis = state.nowMillis + maxOf(
+        6 * 60 * 60 * 1000L,
+        (state.forecast.remainingMillis ?: 0L) + 2 * 60 * 60 * 1000L,
+    )
     val addedText = lastAdded?.let { drink ->
         stringResource(
             R.string.drink_added,
@@ -171,6 +185,30 @@ fun MainScreen(
                 units = units,
             )
 
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(start = 26.dp, bottom = 6.dp),
+            ) {
+                Canvas(modifier = Modifier.size(width = 26.dp, height = 8.dp)) {
+                    drawLine(
+                        color = thresholdColor,
+                        start = Offset(0f, size.height / 2f),
+                        end = Offset(size.width, size.height / 2f),
+                        strokeWidth = 2.dp.toPx(),
+                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(5.dp.toPx(), 4.dp.toPx())),
+                    )
+                }
+                Text(
+                    text = stringResource(
+                        R.string.timeline_threshold,
+                        Formatters.formatBac(state.settings.thresholdPermille, units),
+                    ),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(start = 8.dp),
+                )
+            }
+
             StatusCard(state = state, modifier = Modifier.padding(bottom = 12.dp))
 
             DrinkButtons(
@@ -216,8 +254,8 @@ fun MainScreen(
                 threshold = state.settings.thresholdPermille,
                 units = units,
                 nowMillis = state.nowMillis,
-                initialStartMillis = state.curveStartMillis,
-                initialEndMillis = maxOf(state.curveEndMillis, state.curveStartMillis + 60 * 60 * 1000L),
+                initialStartMillis = viewStartMillis,
+                initialEndMillis = viewEndMillis,
                 driveText = driveText,
             )
 

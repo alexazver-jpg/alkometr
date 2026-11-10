@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
@@ -127,6 +128,10 @@ fun BacTimeline(
 
     val nowLabel = stringResource(R.string.timeline_now)
     val description = stringResource(R.string.timeline_content_description)
+    val thresholdLabel = stringResource(
+        R.string.timeline_threshold,
+        Formatters.formatBac(threshold, units),
+    )
 
     val yMax = max(max(curve.peak().bacGPerL * 1.15, threshold * 1.6), 0.5)
 
@@ -281,6 +286,13 @@ fun BacTimeline(
             strokeWidth = 1.5f,
             pathEffect = PathEffect.dashPathEffect(floatArrayOf(6.dp.toPx(), 5.dp.toPx())),
         )
+        val thresholdWidth = smallPaint.measureText(thresholdLabel)
+        drawContext.canvas.nativeCanvas.drawText(
+            thresholdLabel,
+            right - thresholdWidth,
+            (thresholdY - 4.dp.toPx()).coerceAtLeast(chartTop + 8.dp.toPx()),
+            smallPaint,
+        )
 
         val points = curve.all
         val currentColor = Color(IntoxicationLevel.forBac(curve.valueAt(nowMillis)).colorArgb)
@@ -394,10 +406,15 @@ fun BacTimeline(
             )
         }
 
-        // Маркеры порций под осью
-        drinks.forEach { drink ->
+        // Маркеры порций под осью: близкие по времени разводим на две строки
+        var lastMarkerX = -1000f
+        var markerRow = 0
+        drinks.sortedBy { it.atMillis }.forEach { drink ->
             if (drink.atMillis in windowStart..windowEnd) {
                 val x = xOf(drink.atMillis)
+                markerRow = if (kotlin.math.abs(x - lastMarkerX) < 44.dp.toPx()) 1 - markerRow else 0
+                lastMarkerX = x
+                val rowOffset = markerRow * 12.dp.toPx()
                 val painter = when (drink.kind) {
                     ru.alkometr.app.core.model.DrinkKind.SHOT -> shotIcon
                     ru.alkometr.app.core.model.DrinkKind.WINE_GLASS -> wineIcon
@@ -405,9 +422,11 @@ fun BacTimeline(
                     ru.alkometr.app.core.model.DrinkKind.CUSTOM -> customIcon
                 }
                 val icon = 16.dp.toPx()
-                translate(left = x - icon / 2, top = chartBottom + 20.dp.toPx()) {
+                val strength = (drink.abvPercent / 40.0).coerceIn(0.0, 1.0).toFloat()
+                val drinkTint = lerp(Color(0xFFE0A030), Color(0xFF8D3B12), strength)
+                translate(left = x - icon / 2, top = chartBottom + 16.dp.toPx() + rowOffset) {
                     with(painter) {
-                        draw(size = Size(icon, icon), colorFilter = ColorFilter.tint(iconTint))
+                        draw(size = Size(icon, icon), colorFilter = ColorFilter.tint(drinkTint))
                     }
                 }
                 val age = Formatters.formatAge(drink.atMillis, nowMillis)
@@ -415,7 +434,7 @@ fun BacTimeline(
                 drawContext.canvas.nativeCanvas.drawText(
                     age,
                     (x - ageWidth / 2f).coerceIn(left, right - ageWidth),
-                    chartBottom + 50.dp.toPx(),
+                    chartBottom + 42.dp.toPx() + rowOffset,
                     smallPaint,
                 )
             }

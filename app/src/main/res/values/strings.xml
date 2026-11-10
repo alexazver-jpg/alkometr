@@ -94,6 +94,7 @@
     <string name="settings_drinks_hint">Кнопки на главном экране. Долгое нажатие на кнопку — быстрая правка.</string>
     <string name="settings_add_preset">Добавить пресет</string>
     <string name="settings_edit_preset">Пресет напитка</string>
+    <string name="settings_edit">Изменить</string>
     <string name="settings_preset_name_kind">Сосуд</string>
     <string name="settings_model">Модель расчёта</string>
     <string name="settings_food">Приём пищи</string>
@@ -135,6 +136,7 @@
     <string name="settings_disclaimer">Дисклеймер</string>
     <string name="settings_saved">Сохранено</string>
     <string name="settings_export_done">Файл резервной копии сохранён</string>
+    <string name="settings_export_error">Не удалось сохранить файл резервной копии</string>
     <string name="settings_import_done">Данные импортированы</string>
     <string name="settings_import_error">Не удалось прочитать файл: %1$s</string>
     <string name="settings_clear_confirm">Удалить все порции? Настройки останутся.</string>

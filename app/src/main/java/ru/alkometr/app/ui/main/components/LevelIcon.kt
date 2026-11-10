@@ -6,11 +6,20 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
@@ -46,6 +55,9 @@ fun IntoxicationLevel.hintRes(): Int = when (this) {
 /**
  * Иконка степени опьянения. Пятая степень мягко пульсирует (1,0 → 1,08, 900 мс),
  * смена иконки анимируется кроссфейдом на уровне вызывающего кода.
+ *
+ * Иконки нарисованы тёмным контуром, поэтому на тёмной теме они получают
+ * светлую круглую подложку — иначе персонаж сливается с фоном.
  */
 @Composable
 fun LevelIcon(
@@ -74,11 +86,21 @@ fun LevelIcon(
         1.0f
     }
 
-    Image(
-        painter = painterResource(level.iconRes()),
-        contentDescription = description,
+    val darkTheme = isSystemInDarkTheme()
+
+    Box(
         modifier = modifier
             .size(size)
-            .scale(scale),
-    )
+            .scale(scale)
+            .clip(CircleShape)
+            .background(if (darkTheme) Color(0xFFF6EFE3) else Color.Transparent)
+            .padding(if (darkTheme) size * 0.08f else 0.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Image(
+            painter = painterResource(level.iconRes()),
+            contentDescription = description,
+            modifier = Modifier.fillMaxSize(),
+        )
+    }
 }

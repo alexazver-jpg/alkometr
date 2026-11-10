@@ -4,6 +4,8 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,12 +20,14 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -68,7 +72,7 @@ import kotlin.math.roundToInt
  * Настройки: профиль, напитки, модель, порог и единицы, данные, о приложении.
  * Любое изменение сразу сохраняется и пересчитывает кривую.
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun SettingsScreen(
     settings: AppSettings,
@@ -93,18 +97,20 @@ fun SettingsScreen(
 
     val savedMessage = stringResource(R.string.settings_saved)
     val exportMessage = stringResource(R.string.settings_export_done)
+    val exportErrorMessage = stringResource(R.string.settings_export_error)
     val importMessage = stringResource(R.string.settings_import_done)
 
     val createBackup = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.CreateDocument("application/json"),
     ) { uri ->
         if (uri != null) {
-            runCatching {
-                context.contentResolver.openOutputStream(uri)?.use { stream ->
-                    stream.write(backupJson().toByteArray(Charsets.UTF_8))
-                }
-            }.onSuccess {
-                scope.launch { snackbar.showSnackbar(exportMessage) }
+            val saved = runCatching {
+                val stream = context.contentResolver.openOutputStream(uri) ?: return@runCatching false
+                stream.use { it.write(backupJson().toByteArray(Charsets.UTF_8)) }
+                true
+            }.getOrDefault(false)
+            scope.launch {
+                snackbar.showSnackbar(if (saved) exportMessage else exportErrorMessage)
             }
         }
     }
@@ -165,6 +171,7 @@ fun SettingsScreen(
                     onValueChange = { value ->
                         onSave(settings.copy(profile = settings.profile.copy(weightKg = value.roundToInt().toDouble())))
                     },
+                    colors = brandSliderColors(),
                     valueRange = 30f..200f,
                     steps = 169,
                 )
@@ -181,9 +188,10 @@ fun SettingsScreen(
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(top = 8.dp),
                 )
-                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Sex.entries.forEach { option ->
                         FilterChip(
+                            colors = brandChipColors(),
                             selected = settings.profile.sex == option,
                             onClick = {
                                 onSave(settings.copy(profile = settings.profile.copy(sex = option)))
@@ -245,7 +253,7 @@ fun SettingsScreen(
                             )
                         }
                         TextButton(onClick = { editingPreset = preset }) {
-                            Text(stringResource(R.string.settings_edit_preset))
+                            Text(stringResource(R.string.settings_edit))
                         }
                         TextButton(onClick = {
                             onSave(settings.copy(presets = settings.presets.filterNot { it.id == preset.id }))
@@ -262,9 +270,10 @@ fun SettingsScreen(
             // --- Модель ---
             Section(title = stringResource(R.string.settings_model)) {
                 Text(stringResource(R.string.settings_food), style = MaterialTheme.typography.bodyMedium)
-                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     FoodIntake.entries.forEach { option ->
                         FilterChip(
+                            colors = brandChipColors(),
                             selected = settings.food == option,
                             onClick = { onSave(settings.copy(food = option)) },
                             label = {
@@ -286,9 +295,10 @@ fun SettingsScreen(
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(top = 8.dp),
                 )
-                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Metabolism.entries.forEach { option ->
                         FilterChip(
+                            colors = brandChipColors(),
                             selected = settings.metabolism == option,
                             onClick = { onSave(settings.copy(metabolism = option)) },
                             label = {
@@ -349,9 +359,10 @@ fun SettingsScreen(
 
             // --- Порог и единицы ---
             Section(title = stringResource(R.string.settings_threshold)) {
-                Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     ThresholdPreset.entries.forEach { preset ->
                         FilterChip(
+                            colors = brandChipColors(),
                             selected = abs(settings.thresholdPermille - preset.permille) < 0.001,
                             onClick = { onSave(settings.copy(thresholdPermille = preset.permille)) },
                             label = {
@@ -382,18 +393,20 @@ fun SettingsScreen(
                     modifier = Modifier.padding(top = 8.dp),
                 )
                 Column {
-                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Units.entries.take(2).forEach { unit ->
                             FilterChip(
+                            colors = brandChipColors(),
                                 selected = settings.units == unit,
                                 onClick = { onSave(settings.copy(units = unit)) },
                                 label = { Text(stringResource(unitLabel(unit))) },
                             )
                         }
                     }
-                    Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                    FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Units.entries.drop(2).forEach { unit ->
                             FilterChip(
+                            colors = brandChipColors(),
                                 selected = settings.units == unit,
                                 onClick = { onSave(settings.copy(units = unit)) },
                                 label = { Text(stringResource(unitLabel(unit))) },
@@ -609,3 +622,18 @@ private fun NumberField(
         modifier = Modifier.fillMaxWidth(),
     )
 }
+
+@Composable
+private fun brandChipColors() = FilterChipDefaults.filterChipColors(
+    containerColor = MaterialTheme.colorScheme.surface,
+    labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+    selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.22f),
+    selectedLabelColor = MaterialTheme.colorScheme.onSurface,
+)
+
+@Composable
+private fun brandSliderColors() = SliderDefaults.colors(
+    thumbColor = MaterialTheme.colorScheme.primary,
+    activeTrackColor = MaterialTheme.colorScheme.primary,
+    inactiveTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.25f),
+)

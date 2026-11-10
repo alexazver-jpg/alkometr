@@ -45,6 +45,8 @@ fun StatusCard(state: MainUiState, modifier: Modifier = Modifier) {
 
     val peakText: String? = when {
         state.isEmptySession -> null
+        // В окне последних 24 ч пика уже нет — не показываем «пик 0,0 ‰» в произвольный момент.
+        state.peak.bacGPerL <= 0.0 -> null
         state.peakAhead -> stringResource(
             R.string.status_peak_ahead,
             Formatters.formatBac(state.peak.bacGPerL, units),

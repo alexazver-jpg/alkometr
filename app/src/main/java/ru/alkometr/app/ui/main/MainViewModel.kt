@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
@@ -71,7 +72,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         ticker,
     ) { settings, drinks, now ->
         buildState(settings, drinks, now)
-    }.stateIn(
+    }.flowOn(Dispatchers.Default).stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000L),
         initialValue = MainUiState(),
@@ -80,7 +81,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private fun buildState(settings: AppSettings, drinks: List<Drink>, now: Long): MainUiState {
         val params = settings.modelParams
         val firstDrink = drinks.minOfOrNull { it.atMillis }
-        val curveStart = if (firstDrink == null) now - 6 * HOUR else minOf(firstDrink, now) - 30 * MINUTE
+        // Порции старше 24 ч на модель не влияют (BacEngine), поэтому окно кривой не растягиваем на всю историю.
+        val curveStart = if (firstDrink == null) now - 6 * HOUR else {
+            maxOf(minOf(firstDrink, now) - 30 * MINUTE, now - BacEngine.HORIZON_MILLIS)
+        }
         val curveEnd = if (firstDrink == null) now + 6 * HOUR else maxOf(firstDrink, now) + 24 * HOUR
 
         val points = BacEngine.curve(drinks, params, curveStart, curveEnd)

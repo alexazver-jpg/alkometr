@@ -23,8 +23,15 @@
 
 ## Скриншоты
 
-Эмулятор на машине сборки отсутствовал на момент разработки; скриншоты добавляются в
-`docs/screenshots/` после запуска на устройстве или эмуляторе (см. «Тесты»).
+Сняты на эмуляторе Pixel_8 из Android Studio SDK, сборка 0.1.0.
+
+| Скриншот | Что на нём |
+|---|---|
+| ![Онбординг, шаг «Ваш вес»](docs/screenshots/01-onboarding.png) | Онбординг первого запуска: вес, пол, порог, дисклеймер; можно пропустить |
+| ![Главный экран без порций](docs/screenshots/02-main-empty.png) | Пустая сессия: «Трезв», нулевой уровень, «За руль можно сейчас», подсказка «Нажмите на сосуд, когда выпьете порцию» |
+| ![Главный экран с порцией](docs/screenshots/03-main-with-drink.png) | После порции: уровень вырос, степень сменилась, на шкале времени — кривая, линия «сейчас» и маркер порции |
+| ![Настройки](docs/screenshots/04-settings.png) | Настройки: профиль, пресеты напитков, порог, единицы, резервная копия |
+| ![Тёмная тема](docs/screenshots/05-dark.png) | Тёмная тема: та же шкала и шкала времени; иконки степеней получают светлую подложку, чтобы читаться на графите |
 
 ## Требования
 
@@ -33,6 +40,12 @@
 * Gradle 9.8.2 (wrapper), AGP 9.5.1, встроенный в AGP Kotlin 2.2.10;
 * Compose BOM 2026.09.00, Material 3;
 * Android SDK: `platforms;android-37.0`, `build-tools;37.0.0` (compileSdk 37 — см. «Отклонения»).
+
+Сборка и эмулятор используют SDK установленной Android Studio:
+`C:\Users\user\AppData\Local\Android\Sdk` (платформа `android-37.0`, `build-tools;37.0.0`, `emulator`, AVD Pixel_8).
+Файла `local.properties` в проекте нет намеренно: путь задают `tools\build.ps1` и `tools\check_apk.ps1`
+через `ANDROID_HOME` / `ANDROID_SDK_ROOT`. Если SDK лежит в другом месте, поправьте `$sdk` в этих
+скриптах либо задайте `ANDROID_HOME` перед прямым вызовом `gradlew.bat`.
 
 ## Быстрый старт
 
@@ -50,6 +63,9 @@ powershell -ExecutionPolicy Bypass -File tools\build.ps1 -Tasks :app:assembleDeb
 ```bash
 adb install -r app/build/outputs/apk/debug/app-debug.apk
 ```
+
+Размер debug-APK — **13,7 МБ** (13 697 338 байт). Готовая копия для установки:
+`dist\alkometr-0.1.0-debug.apk`.
 
 ## Как считается
 
@@ -82,7 +98,8 @@ app/src/main/java/ru/alkometr/app/
   ui/AppRoot.kt                  навигация между экранами
 app/src/main/res/drawable/       ic_level_1…5, ic_shot, ic_wine, ic_mug, ic_custom, ic_launcher_foreground
 app/src/test/java/…              юнит-тесты JVM (23)
-docs/                            АЛГОРИТМ.md, ЖУРНАЛ РАЗРАБОТКИ.md, ПРОМПТ, эталонный скрипт, логи
+docs/                            ОТЧЁТ.md, АЛГОРИТМ.md, ЖУРНАЛ РАЗРАБОТКИ.md, ПРОМПТ,
+                                 эталонный скрипт, логи, verification.md, screenshots/
 tools/                           build.ps1, check_apk.ps1, save_version.ps1, Сохранить версию.cmd
 ```
 
@@ -130,7 +147,8 @@ powershell -File tools\check_apk.ps1      # проверки APK без устр
   онбординг, история, пять иконок, тёмная тема.
 * Локальный git-архив: `E:\ProectsAutoClaw\АлкоМетр\` (папки `Программа`, `Документы`, `Тесты`,
   `Инструменты`; скрипт `Сохранить версию.cmd`).
-* GitHub: приватный репозиторий — ссылка появится после публикации (этап 8).
+* GitHub: приватный репозиторий **не создан** — в системе отсутствуют `gh` и `GITHUB_TOKEN`.
+  Команды для публикации силами владельца — в [`docs/ОТЧЁТ.md`](docs/ОТЧЁТ.md), раздел 1.
 
 ## Дисклеймер
 

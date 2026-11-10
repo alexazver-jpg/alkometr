@@ -68,7 +68,7 @@ fun DrinkButtons(
         presets.forEach { preset ->
             Column(
                 modifier = Modifier
-                    .width(96.dp)
+                    .width(90.dp)
                     .height(88.dp)
                     .clip(RoundedCornerShape(16.dp))
                     .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f))
@@ -110,7 +110,7 @@ fun DrinkButtons(
 
         Column(
             modifier = Modifier
-                .width(86.dp)
+                .width(80.dp)
                 .height(88.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f))

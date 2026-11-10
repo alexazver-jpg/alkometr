@@ -79,17 +79,6 @@ fun BacGauge(
             textSize = with(density) { 11.sp.toPx() }
         }
     }
-    val thresholdPaint = remember(labelColor, density) {
-        android.graphics.Paint().apply {
-            isAntiAlias = true
-            color = labelColor.toArgb()
-            textSize = with(density) { 10.sp.toPx() }
-        }
-    }
-    val thresholdLabel = stringResource(
-        R.string.timeline_threshold,
-        Formatters.formatBac(threshold, units),
-    )
 
     val dangerPulse = if (level == IntoxicationLevel.DANGEROUS) {
         val transition = rememberInfiniteTransition(label = "dangerZone")
@@ -170,7 +159,7 @@ fun BacGauge(
                 val value = IntoxicationLevel.SCALE_MAX * i / 4.0
                 val angle = START_ANGLE + SWEEP_ANGLE * (value / IntoxicationLevel.SCALE_MAX).toFloat()
                 val rad = PI * angle / 180.0
-                val labelRadius = radius - stroke - 10.dp.toPx()
+                val labelRadius = radius - stroke - 22.dp.toPx()
                 val lx = cx + labelRadius * cos(rad).toFloat()
                 val ly = cy + labelRadius * sin(rad).toFloat()
                 val text = Formatters.formatValue(value, units)
@@ -197,15 +186,6 @@ fun BacGauge(
                         pathEffect = PathEffect.dashPathEffect(floatArrayOf(6.dp.toPx(), 5.dp.toPx())),
                     ),
                 )
-                val rad = PI * angle / 180.0
-                val tx = cx + (radius - 34.dp.toPx()) * cos(rad).toFloat()
-                val ty = cy + (radius - 34.dp.toPx()) * sin(rad).toFloat()
-                drawContext.canvas.nativeCanvas.drawText(
-                    thresholdLabel,
-                    tx - thresholdPaint.measureText(thresholdLabel) / 2f,
-                    ty,
-                    thresholdPaint,
-                )
             }
 
             // Маркер-стрелка
@@ -215,7 +195,7 @@ fun BacGauge(
             val dirX = cos(markerRad).toFloat()
             val dirY = sin(markerRad).toFloat()
             val tip = Offset(cx + radius * dirX, cy + radius * dirY)
-            val tail = Offset(cx + (radius - 30.dp.toPx()) * dirX, cy + (radius - 30.dp.toPx()) * dirY)
+            val tail = Offset(cx + (radius - 24.dp.toPx()) * dirX, cy + (radius - 24.dp.toPx()) * dirY)
 
             drawLine(
                 color = levelColor,

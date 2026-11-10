@@ -17,10 +17,12 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -93,6 +95,8 @@ fun OnboardingScreen(
         )
         LinearProgressIndicator(
             progress = { (step + 1) / 4f },
+            color = MaterialTheme.colorScheme.primary,
+            trackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.18f),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 6.dp)
@@ -115,6 +119,7 @@ fun OnboardingScreen(
                         modifier = Modifier.padding(top = 8.dp),
                     )
                     Slider(
+                        colors = brandSliderColors(),
                         value = weight,
                         onValueChange = {
                             weight = it
@@ -271,9 +276,25 @@ private fun SexOption(sex: Sex, title: String, selected: Boolean, onSelect: () -
 private fun ThresholdChip(preset: ThresholdPreset, title: String, current: Double, onSelect: (Double) -> Unit) {
     Row(modifier = Modifier.padding(vertical = 2.dp)) {
         FilterChip(
+            colors = brandChipColors(),
             selected = kotlin.math.abs(current - preset.permille) < 0.001,
             onClick = { onSelect(preset.permille) },
             label = { Text(title) },
         )
     }
 }
+
+@Composable
+private fun brandChipColors() = FilterChipDefaults.filterChipColors(
+    containerColor = MaterialTheme.colorScheme.surface,
+    labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+    selectedContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.22f),
+    selectedLabelColor = MaterialTheme.colorScheme.onSurface,
+)
+
+@Composable
+private fun brandSliderColors() = SliderDefaults.colors(
+    thumbColor = MaterialTheme.colorScheme.primary,
+    activeTrackColor = MaterialTheme.colorScheme.primary,
+    inactiveTrackColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.25f),
+)

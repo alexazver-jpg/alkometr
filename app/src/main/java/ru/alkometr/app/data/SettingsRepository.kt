@@ -24,6 +24,9 @@ private val Context.settingsStore: DataStore<Preferences> by preferencesDataStor
 class SettingsRepository(private val context: Context) {
 
     private val key = stringPreferencesKey("settings_json")
+
+    /** Сюда переносится JSON, который не удалось разобрать, чтобы он не пропал при следующей записи. */
+    private val unreadableKey = stringPreferencesKey("settings_json_unreadable")
     private val json = Json { ignoreUnknownKeys = true; encodeDefaults = true }
 
     val settings: Flow<AppSettings> = context.settingsStore.data
@@ -31,10 +34,12 @@ class SettingsRepository(private val context: Context) {
             if (error is IOException) emit(emptyPreferences()) else throw error
         }
         .map { preferences ->
-            val raw = preferences[key] ?: return@map AppSettings()
-            runCatching { json.decodeFromString(AppSettings.serializer(), raw) }
-                .getOrElse { AppSettings() }
+            preferences[key]?.let(::decode) ?: AppSettings()
         }
+
+    /** null — если JSON не читается (повреждён или записан несовместимой версией). */
+    private fun decode(raw: String): AppSettings? =
+        runCatching { json.decodeFromString(AppSettings.serializer(), raw) }.getOrNull()
 
     suspend fun current(): AppSettings = settings.first()
 
@@ -44,8 +49,17 @@ class SettingsRepository(private val context: Context) {
         }
     }
 
+    /**
+     * Читает, меняет и пишет настройки внутри одной транзакции DataStore:
+     * параллельные правки (пресеты, порог) выстраиваются в очередь и не затирают друг друга.
+     */
     suspend fun update(transform: (AppSettings) -> AppSettings) {
-        save(transform(current()))
+        context.settingsStore.edit { preferences ->
+            val raw = preferences[key]
+            val stored = raw?.let(::decode)
+            if (raw != null && stored == null) preferences[unreadableKey] = raw
+            preferences[key] = json.encodeToString(AppSettings.serializer(), transform(stored ?: AppSettings()))
+        }
     }
 
     suspend fun reset() {

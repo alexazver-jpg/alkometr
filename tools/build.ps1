@@ -7,7 +7,7 @@ param(
 $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $jdk = 'E:\ProectsAutoClaw\_tools\jdk-17.0.20.1+1'
-$sdk = 'E:\ProectsAutoClaw\_tools\android-sdk'
+$sdk = 'C:\Users\user\AppData\Local\Android\Sdk'
 
 if (-not (Test-Path "$jdk\bin\java.exe")) { throw "JDK не найден: $jdk" }
 if (-not (Test-Path "$sdk\platforms")) { throw "Android SDK не найден: $sdk" }
