@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Пивная кружка с ручкой и пузырьками. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <path
+        android:pathData="M13,15 L30,15 L30,38 L13,38 Z"
+        android:fillColor="#33E0A030" />
+
+    <path
+        android:pathData="M13,15 L30,15 L30,38 L13,38 Z"
+        android:fillColor="#00000000"
+        android:strokeColor="#263238"
+        android:strokeWidth="2"
+        android:strokeLineJoin="round" />
+
+    <path
+        android:pathData="M30,20 C35,20 37,23 37,26 C37,29 35,32 30,32"
+        android:fillColor="#00000000"
+        android:strokeColor="#263238"
+        android:strokeWidth="2"
+        android:strokeLineCap="round" />
+
+    <path
+        android:pathData="M15,19 L28,19"
+        android:strokeColor="#E0A030"
+        android:strokeWidth="1.6"
+        android:strokeLineCap="round" />
+
+    <!-- пузырьки -->
+    <path
+        android:pathData="M21,26 m-1.4,0 a1.4,1.4 0 1,0 2.8,0 a1.4,1.4 0 1,0 -2.8,0"
+        android:fillColor="#00000000"
+        android:strokeColor="#E0A030"
+        android:strokeWidth="1.4" />
+    <path
+        android:pathData="M25,31 m-1,0 a1,1 0 1,0 2,0 a1,1 0 1,0 -2,0"
+        android:fillColor="#00000000"
+        android:strokeColor="#E0A030"
+        android:strokeWidth="1.2" />
+    <path
+        android:pathData="M20,9 C20,7 23,7 23,9 C23,10.5 21.5,11 20,13"
+        android:strokeColor="#B0BEC5"
+        android:strokeWidth="1.4"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M26,10 C26,8.5 28.5,8.5 28.5,10 C28.5,11.2 27.3,11.6 26,13"
+        android:strokeColor="#B0BEC5"
+        android:strokeWidth="1.4"
+        android:strokeLineCap="round" />
+</vector>

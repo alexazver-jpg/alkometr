@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Степень 1: бокал-робот. Прямые глаза, ровный рот, галочка. Акцент #2E7D32. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <!-- заливка жидкости -->
+    <path
+        android:pathData="M14,19 L34,19 L31,36.5 L17,36.5 Z"
+        android:fillColor="#332E7D32" />
+
+    <!-- корпус бокала -->
+    <path
+        android:pathData="M12,12 L36,12 L31.5,38 L16.5,38 Z"
+        android:fillColor="#00000000"
+        android:strokeColor="#263238"
+        android:strokeWidth="1.8"
+        android:strokeLineJoin="round"
+        android:strokeLineCap="round" />
+
+    <!-- глаза-чёрточки -->
+    <path
+        android:pathData="M17.5,23.5 L21.5,23.5"
+        android:strokeColor="#263238"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M26.5,23.5 L30.5,23.5"
+        android:strokeColor="#263238"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round" />
+
+    <!-- ровный рот -->
+    <path
+        android:pathData="M20.5,29.5 L27.5,29.5"
+        android:strokeColor="#263238"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round" />
+
+    <!-- галочка на груди -->
+    <path
+        android:pathData="M20.5,33.5 L22.6,35.4 L27,31"
+        android:strokeColor="#2E7D32"
+        android:strokeWidth="1.8"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>

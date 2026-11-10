@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">АлкоМетр</string>
+
+    <!-- Верхняя панель -->
+    <string name="menu_settings">Настройки</string>
+    <string name="menu_clear_session">Обнулить сессию</string>
+    <string name="menu_history">История</string>
+    <string name="menu_about">О программе</string>
+    <string name="menu_more">Ещё</string>
+    <string name="back">Назад</string>
+
+    <!-- Статус -->
+    <string name="status_can_drive">Можно за руль</string>
+    <string name="status_drive_in">За руль через %1$s · около %2$s</string>
+    <string name="status_peak_past">Пик %1$s был в %2$s</string>
+    <string name="status_peak_ahead">Пик ещё впереди: %1$s около %2$s</string>
+    <string name="status_no_data">Порций пока нет — шкала в нуле</string>
+    <string name="status_danger">Опасная зона: риск для жизни. Звони 112</string>
+
+    <!-- Степени опьянения -->
+    <string name="level_sober">Трезв</string>
+    <string name="level_mild">Лёгкое опьянение</string>
+    <string name="level_moderate">Среднее опьянение</string>
+    <string name="level_strong">Сильное опьянение</string>
+    <string name="level_dangerous">Опасное отравление</string>
+    <string name="level_sober_hint">Можно за руль</string>
+    <string name="level_mild_hint">Расслаблен, реакция чуть хуже</string>
+    <string name="level_moderate_hint">Весёлый, за руль нельзя</string>
+    <string name="level_strong_hint">Ты почти не стоишь. Такси</string>
+    <string name="level_dangerous_hint">Риск для жизни. Звони 112</string>
+    <string name="level_content_description">Степень опьянения: %1$s</string>
+
+    <!-- Напитки -->
+    <string name="drink_shot">Стопка</string>
+    <string name="drink_wine">Бокал</string>
+    <string name="drink_mug">Кружка</string>
+    <string name="drink_custom">Свой</string>
+    <string name="drink_add_custom">+ Свой</string>
+    <string name="drink_caption">%1$s мл · %2$s %%</string>
+    <string name="drink_added">+%1$s ‰</string>
+    <string name="drink_added_content_description">Добавлена порция: %1$s</string>
+    <string name="drink_last">%1$s · %2$s %3$s мл · %4$s %%</string>
+    <string name="undo">Отменить</string>
+    <string name="drinks_empty_hint">Нажмите на сосуд, когда выпьете порцию</string>
+
+    <!-- Диалог своей порции -->
+    <string name="custom_title">Своя порция</string>
+    <string name="custom_volume">Объём, мл</string>
+    <string name="custom_abv">Крепость, %</string>
+    <string name="custom_time">Время</string>
+    <string name="custom_time_now">Сейчас</string>
+    <string name="custom_time_pick">Указать</string>
+    <string name="custom_add">Добавить</string>
+    <string name="cancel">Отмена</string>
+    <string name="save">Сохранить</string>
+    <string name="delete">Удалить</string>
+    <string name="error_volume">Объём должен быть от 10 до 2000 мл</string>
+    <string name="error_abv">Крепость должна быть от 0 до 96 %</string>
+    <string name="error_weight">Вес должен быть от 30 до 200 кг</string>
+
+    <!-- Шкала времени -->
+    <string name="timeline_title">Уровень алкоголя по времени</string>
+    <string name="timeline_now">сейчас</string>
+    <string name="timeline_threshold">порог %1$s</string>
+    <string name="timeline_drive_at">За руль: с %1$s · через %2$s</string>
+    <string name="timeline_drive_now">За руль можно сейчас</string>
+    <string name="timeline_drive_unknown">Прогноз дальше 24 часов не строится</string>
+    <string name="timeline_scrub_card">%1$s · %2$s · %3$s</string>
+    <string name="timeline_scrub_past">%1$s · %2$s · %3$s · было</string>
+    <string name="timeline_scrub_to_threshold">до порога %1$s</string>
+    <string name="timeline_zoom_in">Приблизить</string>
+    <string name="timeline_zoom_out">Отдалить</string>
+    <string name="timeline_reset">Показать сейчас</string>
+    <string name="timeline_content_description">Шкала времени: уровень алкоголя, порции и прогноз</string>
+    <string name="timeline_drinks_header">Порции на шкале</string>
+    <string name="timeline_drinks_expand">Показать список порций</string>
+    <string name="timeline_drinks_collapse">Скрыть список порций</string>
+    <string name="timeline_no_drinks">Порций нет</string>
+    <string name="timeline_drink_item">%1$s · %2$s · %3$s мл · %4$s %%</string>
+
+    <!-- Настройки -->
+    <string name="settings_title">Настройки</string>
+    <string name="settings_profile">Профиль</string>
+    <string name="settings_weight">Вес, кг</string>
+    <string name="settings_sex">Пол</string>
+    <string name="settings_sex_male">Мужской</string>
+    <string name="settings_sex_female">Женский</string>
+    <string name="settings_sex_unspecified">Не указывать</string>
+    <string name="settings_sex_hint">Пол нужен только для коэффициента распределения алкоголя в формуле Видмарка</string>
+    <string name="settings_height">Рост, см (необязательно)</string>
+    <string name="settings_age">Возраст (необязательно)</string>
+    <string name="settings_drinks">Напитки</string>
+    <string name="settings_drinks_hint">Кнопки на главном экране. Долгое нажатие на кнопку — быстрая правка.</string>
+    <string name="settings_add_preset">Добавить пресет</string>
+    <string name="settings_edit_preset">Пресет напитка</string>
+    <string name="settings_preset_name_kind">Сосуд</string>
+    <string name="settings_model">Модель расчёта</string>
+    <string name="settings_food">Приём пищи</string>
+    <string name="settings_food_empty">Натощак</string>
+    <string name="settings_food_normal">Обычно</string>
+    <string name="settings_food_heavy">Плотно поел</string>
+    <string name="settings_metabolism">Метаболизм</string>
+    <string name="settings_metabolism_slow">Медленный</string>
+    <string name="settings_metabolism_average">Средний</string>
+    <string name="settings_metabolism_fast">Быстрый</string>
+    <string name="settings_advanced">Дополнительно</string>
+    <string name="settings_advanced_hint">Ручные значения ломают типовой расчёт: кривая перестаёт соответствовать средним данным.</string>
+    <string name="settings_ka">Скорость всасывания ka, 1/ч</string>
+    <string name="settings_vmax">Скорость выведения Vmax, г/л/ч</string>
+    <string name="settings_km">Константа Михаэлиса Km, г/л</string>
+    <string name="settings_r">Коэффициент распределения r</string>
+    <string name="settings_reset_params">Вернуть рекомендуемые</string>
+    <string name="settings_threshold">Порог и единицы</string>
+    <string name="settings_threshold_value">Порог для вождения, ‰</string>
+    <string name="settings_threshold_russia">Россия 0,3 ‰</string>
+    <string name="settings_threshold_europe">Европа 0,5 ‰</string>
+    <string name="settings_threshold_usa">США 0,8 ‰</string>
+    <string name="settings_threshold_zero">Нулевая толерантность</string>
+    <string name="settings_threshold_custom">Свой</string>
+    <string name="settings_threshold_warning">Порог для вождения зависит от страны и меняется — проверьте актуальную норму.</string>
+    <string name="settings_units">Единицы отображения</string>
+    <string name="settings_units_permille">‰ (промилле)</string>
+    <string name="settings_units_percent">% (проценты)</string>
+    <string name="settings_units_mg_100">мг/100 мл</string>
+    <string name="settings_units_mg_l">мг/л</string>
+    <string name="settings_data">Данные</string>
+    <string name="settings_export">Экспорт в JSON</string>
+    <string name="settings_import">Импорт из JSON</string>
+    <string name="settings_clear_history">Очистить историю</string>
+    <string name="settings_reset_all">Сбросить всё</string>
+    <string name="settings_about">О приложении</string>
+    <string name="settings_version">Версия %1$s</string>
+    <string name="settings_repository">Репозиторий проекта</string>
+    <string name="settings_disclaimer">Дисклеймер</string>
+    <string name="settings_saved">Сохранено</string>
+    <string name="settings_export_done">Файл резервной копии сохранён</string>
+    <string name="settings_import_done">Данные импортированы</string>
+    <string name="settings_import_error">Не удалось прочитать файл: %1$s</string>
+    <string name="settings_clear_confirm">Удалить все порции? Настройки останутся.</string>
+    <string name="settings_reset_confirm">Сбросить все настройки и историю? Действие необратимо.</string>
+    <string name="confirm">Подтвердить</string>
+
+    <!-- Онбординг -->
+    <string name="onboarding_weight_title">Ваш вес</string>
+    <string name="onboarding_weight_text">Вес определяет объём распределения алкоголя в организме. Это главный параметр расчёта.</string>
+    <string name="onboarding_sex_title">Пол</string>
+    <string name="onboarding_sex_text">В формуле Видмарка у мужчин коэффициент 0,71, у женщин — 0,58. Если не указывать — 0,65.</string>
+    <string name="onboarding_threshold_title">Порог для вождения</string>
+    <string name="onboarding_threshold_text">Показываем, когда уровень опустится до допустимого. Нормы различаются по странам.</string>
+    <string name="onboarding_next">Дальше</string>
+    <string name="onboarding_skip">Пропустить</string>
+    <string name="onboarding_start">Понятно, начать</string>
+    <string name="onboarding_step">Шаг %1$d из %2$d</string>
+
+    <!-- История -->
+    <string name="history_title">История</string>
+    <string name="history_empty">За последние 7 дней порций нет</string>
+    <string name="history_add_past">Добавить за прошлое время</string>
+    <string name="history_today">Сегодня</string>
+    <string name="history_yesterday">Вчера</string>
+    <string name="history_item_grams">%1$s г спирта</string>
+    <string name="history_delete">Удалить порцию</string>
+    <string name="history_range_hint">Показаны порции за последние 7 дней</string>
+
+    <!-- О программе -->
+    <string name="about_title">О программе</string>
+    <string name="about_text">«АлкоМетр» — офлайновый расчётный трекер уровня алкоголя в крови. Приложение не измеряет алкоголь, а моделирует его по выпитому: всасывание первого порядка и выведение по Михаэлису–Ментену. Все данные остаются на устройстве, сетевых разрешений нет.</string>
+    <string name="about_algorithm">Как считается</string>
+    <string name="about_algorithm_text">C(t) — концентрация в г/л (это же промилле). D = V × (ABV/100) × 0,789 г. Vd = r × вес. Всасывание: da/dt = −ka·a. Выведение: dC/dt = input/Vd − Vmax·C/(Km+C). Шаг интегрирования — 1 минута, горизонт прогноза — 24 часа.</string>
+    <string name="disclaimer_title">Важно понимать</string>
+    <string name="disclaimer_text">«АлкоМетр» рассчитывает уровень алкоголя по формуле Видмарка и средней скорости метаболизма. Это приблизительная оценка, а не медицинское измерение. Индивидуальные отклонения достигают 30 %. Приложение не заменяет алкотестер и не является доказательством в спорах. Никогда не садитесь за руль после алкоголя, даже если приложение показывает допустимое значение. При признаках тяжёлого опьянения (потеря сознания, рвота, холодная кожа) — зовите скорую (112).</string>
+    <string name="close">Закрыть</string>
+
+    <!-- Общее -->
+    <string name="value_with_unit">%1$s %2$s</string>
+    <string name="clock_at">в %1$s</string>
+</resources>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- бокал -->
+    <path
+        android:pathData="M38,32 L70,32 L64,78 L44,78 Z"
+        android:fillColor="#00000000"
+        android:strokeColor="#F6EFE3"
+        android:strokeWidth="3.2"
+        android:strokeLineJoin="round" />
+
+    <!-- жидкость -->
+    <path
+        android:pathData="M41,48 L67,48 L63,75 L45,75 Z"
+        android:fillColor="#E0A030" />
+
+    <!-- глаза -->
+    <path android:pathData="M45,53 L51,53" android:strokeColor="#1B1D21" android:strokeWidth="3" android:strokeLineCap="round" />
+    <path android:pathData="M57,53 L63,53" android:strokeColor="#1B1D21" android:strokeWidth="3" android:strokeLineCap="round" />
+
+    <!-- улыбка -->
+    <path
+        android:pathData="M47,61 Q54,67 61,61"
+        android:fillColor="#00000000"
+        android:strokeColor="#1B1D21"
+        android:strokeWidth="3"
+        android:strokeLineCap="round" />
+</vector>

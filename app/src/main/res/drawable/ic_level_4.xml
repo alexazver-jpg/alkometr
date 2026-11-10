@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Степень 4: бокал-качалка. Глаза вразнобой, рот волной, наклон, капли. Акцент #EF6C00. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <group
+        android:rotation="10"
+        android:pivotX="24"
+        android:pivotY="24">
+
+        <path
+            android:pathData="M14,19 L34,19 L31,36.5 L17,36.5 Z"
+            android:fillColor="#40EF6C00" />
+
+        <path
+            android:pathData="M12,12 L36,12 L31.5,38 L16.5,38 Z"
+            android:fillColor="#00000000"
+            android:strokeColor="#263238"
+            android:strokeWidth="1.8"
+            android:strokeLineJoin="round"
+            android:strokeLineCap="round" />
+
+        <!-- левый глаз выше -->
+        <path
+            android:pathData="M17.5,22.5 L21.5,22.5"
+            android:strokeColor="#263238"
+            android:strokeWidth="1.8"
+            android:strokeLineCap="round" />
+
+        <!-- правый глаз ниже -->
+        <path
+            android:pathData="M26.5,25 L30.5,25"
+            android:strokeColor="#263238"
+            android:strokeWidth="1.8"
+            android:strokeLineCap="round" />
+
+        <!-- рот волной -->
+        <path
+            android:pathData="M19.5,29.5 Q21.5,27.8 23.5,29.5 Q25.5,31.2 27.5,29.5"
+            android:fillColor="#00000000"
+            android:strokeColor="#263238"
+            android:strokeWidth="1.8"
+            android:strokeLineCap="round" />
+    </group>
+
+    <!-- капли -->
+    <path
+        android:pathData="M39,17.5 C40.6,20 40.6,21.6 39,22.6 C37.4,21.6 37.4,20 39,17.5 Z"
+        android:fillColor="#EF6C00" />
+    <path
+        android:pathData="M9,21 C10.2,23 10.2,24.2 9,25 C7.8,24.2 7.8,23 9,21 Z"
+        android:fillColor="#66EF6C00" />
+</vector>
