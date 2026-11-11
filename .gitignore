@@ -12,4 +12,3 @@ local.properties
 *.keystore
 !tools/debug.keystore
 dist/*.apk
-docs/screenshots/*.png

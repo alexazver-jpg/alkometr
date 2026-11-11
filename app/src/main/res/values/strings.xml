@@ -134,7 +134,7 @@
     <string name="settings_about">О приложении</string>
     <string name="settings_version">Версия %1$s</string>
     <string name="settings_repository">Репозиторий проекта</string>
-    <string name="settings_repository_url" translatable="false"></string>
+    <string name="settings_repository_url" translatable="false">https://github.com/alexazver-jpg/alkometr</string>
     <string name="settings_disclaimer">Дисклеймер</string>
     <string name="settings_saved">Сохранено</string>
     <string name="settings_export_done">Файл резервной копии сохранён</string>
