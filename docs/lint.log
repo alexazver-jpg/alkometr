@@ -20,12 +20,12 @@
 > Task :app:processDebugResources UP-TO-DATE
 > Task :app:bundleDebugClassesToCompileJar UP-TO-DATE
 > Task :app:preDebugAndroidTestBuild SKIPPED
-> Task :app:generateDebugAndroidTestLintModel
+> Task :app:generateDebugAndroidTestLintModel UP-TO-DATE
 > Task :app:extractProguardFiles UP-TO-DATE
 > Task :app:generateDebugLintReportModel
 > Task :app:preDebugUnitTestBuild UP-TO-DATE
 > Task :app:generateDebugUnitTestLintModel
-> Task :app:lintAnalyzeDebugAndroidTest
+> Task :app:lintAnalyzeDebugAndroidTest UP-TO-DATE
 > Task :app:lintAnalyzeDebugUnitTest
 > Task :app:lintAnalyzeDebug
 
@@ -43,6 +43,6 @@ You can use '--warning-mode all' to show the individual deprecation warnings and
 
 For more on this, please refer to https://docs.gradle.org/9.8.2/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
 
-BUILD SUCCESSFUL in 19s
-27 actionable tasks: 8 executed, 19 up-to-date
+BUILD SUCCESSFUL in 13s
+27 actionable tasks: 6 executed, 21 up-to-date
 Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.8.2/userguide/configuration_cache_enabling.html
