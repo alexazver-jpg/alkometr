@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Те же ресурсы темы, но для НОЧНОГО режима: папка res/values-night включается,
+     когда в системе выбрана тёмная тема. Имя стиля обязано совпадать со светлым вариантом —
+     Android сам выберет файл по конфигурации, код менять не нужно. -->
 <resources>
+    <!-- Родитель без Light: android:Theme.Material — тёмная основа Material,
+         поэтому системные элементы (диалоги, тосты) выглядят тёмными. -->
     <style name="Theme.Alkometr" parent="android:Theme.Material.NoActionBar">
+        <!-- Фон окна — графит #1B1D21, тот же, что Graphite и background тёмной схемы:
+             при старте приложения нет вспышки светлого экрана. -->
         <item name="android:windowBackground">#1B1D21</item>
+        <!-- Прозрачные системные панели: их цвет задаёт Compose, интерфейс идёт под статус-бар и навигацию. -->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
+        <!-- windowLightStatusBar=false — иконки часов и батареи остаются светлыми,
+             иначе на тёмном фоне они были бы не видны. -->
         <item name="android:windowLightStatusBar">false</item>
     </style>
 </resources>

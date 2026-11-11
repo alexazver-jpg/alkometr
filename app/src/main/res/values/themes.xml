@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Ресурсы ТЕМЫ для светлого режима. Папка res/values — конфигурация по умолчанию;
+     значения из res/values-night подхватываются автоматически, когда в системе включена тёмная тема. -->
 <resources>
+    <!-- <style> — набор значений для атрибутов окна. name — имя, на которое ссылаются из манифеста
+         (@style/Theme.Alkometr); parent — тема-основа, чьи значения наследуются, если не переопределены.
+         NoActionBar означает «без верхней панели с названием приложения»: её рисует сам Compose. -->
     <style name="Theme.Alkometr" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- windowBackground — цвет «подложки» окна. Он виден в первую долю секунды, пока Compose
+             ещё не нарисовал UI, поэтому совпадает с background из Color.kt и не даёт белой вспышки. -->
         <item name="android:windowBackground">#F6EFE3</item>
+        <!-- Полностью прозрачные системные панели: цвет под ними задаёт Compose,
+             и интерфейс выглядит цельным, без серых полос сверху и снизу. -->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
+        <!-- windowLightStatusBar=true — иконки часов и батареи делаются тёмными,
+             чтобы их было видно на светлом фоне; в ночной теме значение меняется на false. -->
         <item name="android:windowLightStatusBar">true</item>
     </style>
 </resources>

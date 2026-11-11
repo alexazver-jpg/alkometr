@@ -1,18 +1,28 @@
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
+// Файл настроек: Gradle выполняет его первым, ещё до чтения build-файлов модулей.
+// Здесь решается, из каких модулей состоит проект и где искать плагины и зависимости.
+//
+// Термины, которые встречаются ниже:
+// • Плагин — расширение Gradle, добавляющее задачи и блоки настроек (например, сборку APK).
+// • Репозиторий — удалённый «склад» артефактов, откуда Gradle скачивает плагины и библиотеки.
+// • Зависимость — конкретная библиотека, код которой использует приложение.
+
+pluginManagement { // Настройки скачивания САМИХ ПЛАГИНОВ (а не библиотек приложения).
+    repositories { // Список складов: Gradle ищет артефакт по ним по очереди, сверху вниз.
+        google() // Официальный репозиторий Google: Android Gradle Plugin, AndroidX, Material.
+        mavenCentral() // Крупнейший публичный Maven-склад: Kotlin, kotlinx, JUnit.
+        gradlePluginPortal() // Каталог Gradle-плагинов сообщества (plugins.gradle.org).
     }
 }
 
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
+dependencyResolutionManagement { // Настройки скачивания ЗАВИСИМОСТЕЙ приложения (compose, datastore и др.).
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS) // Запрещает модулям объявлять свои
+    // repositories: все склады описаны только здесь. Иначе одна и та же библиотека могла бы
+    // приехать из разных мест, и сборка стала бы непредсказуемой.
+    repositories { // Те же основные склады, что и для плагинов.
+        google() // AndroidX и прочие библиотеки Google.
+        mavenCentral() // Kotlin, kotlinx.serialization, JUnit и большинство open-source библиотек.
     }
 }
 
-rootProject.name = "Alkometr"
-include(":app")
+rootProject.name = "Alkometr" // Имя корневого проекта: видно в IDE и в отчётах сборки.
+include(":app") // Подключает модуль app (папка app/): без этой строки Gradle просто не увидит модуль.

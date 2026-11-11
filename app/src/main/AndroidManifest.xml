@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Манифест — «анкета» приложения для Android: что за приложение, какие у него компоненты
+     и с какими разрешениями оно работает. Система читает манифест при установке. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- <application> описывает приложение целиком. Значения атрибутов (их нельзя комментировать
+         внутри тега, поэтому перечисляем здесь):
+         • android:name=".AlkometrApp" — свой класс Application, самый первый код приложения
+           (точка в начале = имя относительно namespace);
+         • android:allowBackup="true" — разрешает системный автобэкап данных приложения;
+         • android:icon / android:roundIcon — иконки в лаунчере из ресурсов mipmap;
+         • android:label="@string/app_name" — видимое название (ссылка на strings.xml);
+         • android:supportsRtl="true" — поддержка языков с письмом справа налево;
+         • android:theme="@style/Theme.Alkometr" — стартовая тема окна из res/values/themes.xml. -->
     <application
         android:name=".AlkometrApp"
         android:allowBackup="true"
@@ -10,10 +21,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Alkometr">
 
+        <!-- <activity> — экран, которым управляет система. Атрибуты:
+             • android:name=".MainActivity" — класс активности (относительно namespace);
+             • android:exported="true" — компонент можно запустить снаружи приложения;
+               для активности с LAUNCHER-фильтром это обязательно, иначе установка не пройдёт;
+             • android:theme — тема именно этого окна (перекрывает тему приложения). -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Alkometr">
+            <!-- intent-filter описывает, на какие системные запросы отвечает активность.
+                 action MAIN — «это точка входа», category LAUNCHER — «показывать в списке
+                 приложений и запускать по иконке». Вместе они делают активность
+                 стартовым экраном приложения. -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -2,26 +2,30 @@ package ru.alkometr.app.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
+// Все цвета приложения в одном файле. Color(0xAARRGGBB) — 32-битное ARGB-значение:
+// AA — прозрачность (альфа), RR — красный, GG — зелёный, BB — синий; 0xFF = непрозрачный.
+// Один цвет = одно число, поэтому палитра легко читается и правится в одном месте.
+
 // Брендовые цвета: тёплый янтарь на графите.
-val Amber = Color(0xFFE0A030)
-val AmberDark = Color(0xFFB07A18)
-val Graphite = Color(0xFF1B1D21)
-val GraphiteSoft = Color(0xFF24272C)
-val Sand = Color(0xFFF6EFE3)
-val SandCard = Color(0xFFFFFBF3)
-val Ink = Color(0xFF1F2124)
-val InkSoft = Color(0xFF5A5F66)
+val Amber = Color(0xFFE0A030) // Главный акцент: кнопки, иконки, выделения. Тёплый янтарь «как алкоголь».
+val AmberDark = Color(0xFFB07A18) // Затемнённый янтарь для светлой темы и контейнеров: на песке он читаемее.
+val Graphite = Color(0xFF1B1D21) // Почти чёрный графит — фон тёмной темы и текст на янтаре.
+val GraphiteSoft = Color(0xFF24272C) // Чуть светлее графита: поверхности карточек, чтобы они отделялись от фона.
+val Sand = Color(0xFFF6EFE3) // Тёплый песочный фон светлой темы — вместо стерильного белого.
+val SandCard = Color(0xFFFFFBF3) // Почти белая карточка на песке: мягкий контраст без резкой границы.
+val Ink = Color(0xFF1F2124) // Основной цвет текста в светлой теме (не чистый чёрный — меньше утомляет).
+val InkSoft = Color(0xFF5A5F66) // Приглушённый текст: подписи, пояснения, второстепенные данные.
 
 // Цвета степеней опьянения — те же значения, что в IntoxicationLevel.
-val LevelSober = Color(0xFF2E7D32)
-val LevelMild = Color(0xFF9CCC65)
-val LevelModerate = Color(0xFFFBC02D)
-val LevelStrong = Color(0xFFEF6C00)
-val LevelDangerous = Color(0xFFC62828)
+val LevelSober = Color(0xFF2E7D32) // Трезв: зелёный, привычный сигнал «всё в порядке».
+val LevelMild = Color(0xFF9CCC65) // Лёгкая степень: салатовый, переход от зелёного.
+val LevelModerate = Color(0xFFFBC02D) // Средняя степень: жёлтый — «внимание».
+val LevelStrong = Color(0xFFEF6C00) // Сильная степень: оранжевый — «опасно».
+val LevelDangerous = Color(0xFFC62828) // Опасная степень: красный — максимальный уровень тревоги.
 
 // Служебные цвета
-val Danger = Color(0xFFC62828)
-val Success = Color(0xFF2E7D32)
-val Warning = Color(0xFFEF6C00)
-val GridLine = Color(0x33FFFFFF)
-val GridLineLight = Color(0x22000000)
+val Danger = Color(0xFFC62828) // Ошибки и необратимые действия (удаление, сброс данных).
+val Success = Color(0xFF2E7D32) // Успешное сохранение, «безопасное» состояние.
+val Warning = Color(0xFFEF6C00) // Предупреждение: состояние, которое скоро станет плохим.
+val GridLine = Color(0x33FFFFFF) // Линия сетки графика на тёмном фоне: 0x33 ≈ 20 % непрозрачности.
+val GridLineLight = Color(0x22000000) // То же на светлом фоне: полупрозрачный чёрный, ≈ 13 %.
