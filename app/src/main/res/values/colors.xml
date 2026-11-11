@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    colors.xml — палитра приложения: именованные цвета, на которые другие файлы
+    (drawable, layout, mipmap) ссылаются по имени, например @color/ic_launcher_background.
+
+    Цвет записывается как #AARRGGBB: AA — прозрачность (FF — полностью непрозрачный,
+    00 — полностью прозрачный), RRGGBB — красная, зелёная и синяя составляющие.
+    В векторных drawable-файлах эта же запись встречается в fillColor и strokeColor.
+-->
 <resources>
+    <!-- Фон адаптивной иконки: тёмный, чтобы светлый бокал на нём читался. -->
     <color name="ic_launcher_background">#1B1D21</color>
 </resources>

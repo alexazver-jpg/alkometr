@@ -6,10 +6,32 @@
     android:viewportWidth="48"
     android:viewportHeight="48">
 
+    <!--
+        Как читать этот файл.
+        VectorDrawable — векторная картинка: Android рисует её по математическим командам,
+        а не по пикселям, поэтому она остаётся чёткой на любом экране и в любом размере.
+
+        width / height — размер иконки на экране (48dp).
+        viewportWidth / viewportHeight — внутренняя сетка координат: 48 × 48 условных единиц.
+        В них записан весь рисунок, а на экран он масштабируется целиком.
+        pathData — команды контура: M — поставить перо в точку, L — линия к точке,
+        C и Q — кривые, Z — замкнуть контур.
+        fillColor — заливка внутри контура; запись #AARRGGBB: первые две цифры — прозрачность
+        (00 — прозрачно, FF — плотно), остальные шесть — цвет. #00000000 значит «без заливки».
+        strokeColor — цвет обводки, strokeWidth — её толщина в единицах viewport,
+        strokeLineCap / strokeLineJoin — форма концов и стыков.
+        group — контейнер: rotation поворачивает фигуры на угол в градусах вокруг точки
+        pivotX / pivotY, при этом их pathData не меняются.
+
+        Ниже — свой сосуд: по одной детали на каждый path.
+    -->
+
+    <!-- жидкость: полупрозрачная заливка стакана -->
     <path
         android:pathData="M15,14 L33,14 L30.5,38 L17.5,38 Z"
         android:fillColor="#22E0A030" />
 
+    <!-- стенки стакана: трапеция, только обводка -->
     <path
         android:pathData="M15,14 L33,14 L30.5,38 L17.5,38 Z"
         android:fillColor="#00000000"
@@ -17,11 +39,13 @@
         android:strokeWidth="2"
         android:strokeLineJoin="round" />
 
+    <!-- плюс: вертикальная черта -->
     <path
         android:pathData="M24,21 L24,31"
         android:strokeColor="#E0A030"
         android:strokeWidth="2.2"
         android:strokeLineCap="round" />
+    <!-- плюс: горизонтальная черта, вместе с верхней — знак «добавить свой вариант» -->
     <path
         android:pathData="M19,26 L29,26"
         android:strokeColor="#E0A030"

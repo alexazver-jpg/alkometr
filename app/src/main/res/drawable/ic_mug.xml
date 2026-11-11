@@ -6,10 +6,32 @@
     android:viewportWidth="48"
     android:viewportHeight="48">
 
+    <!--
+        Как читать этот файл.
+        VectorDrawable — векторная картинка: Android рисует её по математическим командам,
+        а не по пикселям, поэтому она остаётся чёткой на любом экране и в любом размере.
+
+        width / height — размер иконки на экране (48dp).
+        viewportWidth / viewportHeight — внутренняя сетка координат: 48 × 48 условных единиц.
+        В них записан весь рисунок, а на экран он масштабируется целиком.
+        pathData — команды контура: M — поставить перо в точку, L — линия к точке,
+        C и Q — кривые, Z — замкнуть контур.
+        fillColor — заливка внутри контура; запись #AARRGGBB: первые две цифры — прозрачность
+        (00 — прозрачно, FF — плотно), остальные шесть — цвет. #00000000 значит «без заливки».
+        strokeColor — цвет обводки, strokeWidth — её толщина в единицах viewport,
+        strokeLineCap / strokeLineJoin — форма концов и стыков.
+        group — контейнер: rotation поворачивает фигуры на угол в градусах вокруг точки
+        pivotX / pivotY, при этом их pathData не меняются.
+
+        Ниже — пивная кружка: по одной детали на каждый path.
+    -->
+
+    <!-- пиво в кружке: полупрозрачная заливка -->
     <path
         android:pathData="M13,15 L30,15 L30,38 L13,38 Z"
         android:fillColor="#33E0A030" />
 
+    <!-- корпус кружки: прямоугольник, только обводка -->
     <path
         android:pathData="M13,15 L30,15 L30,38 L13,38 Z"
         android:fillColor="#00000000"
@@ -17,6 +39,7 @@
         android:strokeWidth="2"
         android:strokeLineJoin="round" />
 
+    <!-- ручка сбоку -->
     <path
         android:pathData="M30,20 C35,20 37,23 37,26 C37,29 35,32 30,32"
         android:fillColor="#00000000"
@@ -24,6 +47,7 @@
         android:strokeWidth="2"
         android:strokeLineCap="round" />
 
+    <!-- линия уровня напитка -->
     <path
         android:pathData="M15,19 L28,19"
         android:strokeColor="#E0A030"
@@ -36,16 +60,19 @@
         android:fillColor="#00000000"
         android:strokeColor="#E0A030"
         android:strokeWidth="1.4" />
+    <!-- пузырёк: меньший, ниже -->
     <path
         android:pathData="M25,31 m-1,0 a1,1 0 1,0 2,0 a1,1 0 1,0 -2,0"
         android:fillColor="#00000000"
         android:strokeColor="#E0A030"
         android:strokeWidth="1.2" />
+    <!-- пар: первая струйка над кружкой -->
     <path
         android:pathData="M20,9 C20,7 23,7 23,9 C23,10.5 21.5,11 20,13"
         android:strokeColor="#B0BEC5"
         android:strokeWidth="1.4"
         android:strokeLineCap="round" />
+    <!-- пар: вторая струйка -->
     <path
         android:pathData="M26,10 C26,8.5 28.5,8.5 28.5,10 C28.5,11.2 27.3,11.6 26,13"
         android:strokeColor="#B0BEC5"

@@ -6,10 +6,32 @@
     android:viewportWidth="48"
     android:viewportHeight="48">
 
+    <!--
+        Как читать этот файл.
+        VectorDrawable — векторная картинка: Android рисует её по математическим командам,
+        а не по пикселям, поэтому она остаётся чёткой на любом экране и в любом размере.
+
+        width / height — размер иконки на экране (48dp).
+        viewportWidth / viewportHeight — внутренняя сетка координат: 48 × 48 условных единиц.
+        В них записан весь рисунок, а на экран он масштабируется целиком.
+        pathData — команды контура: M — поставить перо в точку, L — линия к точке,
+        C и Q — кривые, Z — замкнуть контур.
+        fillColor — заливка внутри контура; запись #AARRGGBB: первые две цифры — прозрачность
+        (00 — прозрачно, FF — плотно), остальные шесть — цвет. #00000000 значит «без заливки».
+        strokeColor — цвет обводки, strokeWidth — её толщина в единицах viewport,
+        strokeLineCap / strokeLineJoin — форма концов и стыков.
+        group — контейнер: rotation поворачивает фигуры на угол в градусах вокруг точки
+        pivotX / pivotY, при этом их pathData не меняются.
+
+        Ниже — бокал для вина: по одной детали на каждый path.
+    -->
+
+    <!-- вино в чаше: полупрозрачная заливка -->
     <path
         android:pathData="M15,12 L33,12 L33,18 C33,23 29,26.5 24,26.5 C19,26.5 15,23 15,18 Z"
         android:fillColor="#33E0A030" />
 
+    <!-- чаша: скруглённая книзу, только обводка -->
     <path
         android:pathData="M15,12 L33,12 L33,18 C33,23 29,26.5 24,26.5 C19,26.5 15,23 15,18 Z"
         android:fillColor="#00000000"
@@ -17,18 +39,21 @@
         android:strokeWidth="2"
         android:strokeLineJoin="round" />
 
+    <!-- ножка бокала -->
     <path
         android:pathData="M24,26.5 L24,36"
         android:strokeColor="#263238"
         android:strokeWidth="2"
         android:strokeLineCap="round" />
 
+    <!-- основание-подставка -->
     <path
         android:pathData="M18,37 L30,37"
         android:strokeColor="#263238"
         android:strokeWidth="2"
         android:strokeLineCap="round" />
 
+    <!-- линия уровня вина внутри чаши -->
     <path
         android:pathData="M17,17 L31,17"
         android:strokeColor="#E0A030"

@@ -6,10 +6,32 @@
     android:viewportWidth="48"
     android:viewportHeight="48">
 
+    <!--
+        Как читать этот файл.
+        VectorDrawable — векторная картинка: Android рисует её по математическим командам,
+        а не по пикселям, поэтому она остаётся чёткой на любом экране и в любом размере.
+
+        width / height — размер иконки на экране (48dp).
+        viewportWidth / viewportHeight — внутренняя сетка координат: 48 × 48 условных единиц.
+        В них записан весь рисунок, а на экран он масштабируется целиком.
+        pathData — команды контура: M — поставить перо в точку, L — линия к точке,
+        C и Q — кривые, Z — замкнуть контур.
+        fillColor — заливка внутри контура; запись #AARRGGBB: первые две цифры — прозрачность
+        (00 — прозрачно, FF — плотно), остальные шесть — цвет. #00000000 значит «без заливки».
+        strokeColor — цвет обводки, strokeWidth — её толщина в единицах viewport,
+        strokeLineCap / strokeLineJoin — форма концов и стыков.
+        group — контейнер: rotation поворачивает фигуры на угол в градусах вокруг точки
+        pivotX / pivotY, при этом их pathData не меняются.
+
+        Ниже — стопка: по одной детали на каждый path.
+    -->
+
+    <!-- жидкость: напиток внутри стопки, полупрозрачная заливка -->
     <path
         android:pathData="M16,14 L32,14 L29.5,34 L18.5,34 Z"
         android:fillColor="#33E0A030" />
 
+    <!-- стенки стопки: сужающаяся трапеция, только обводка -->
     <path
         android:pathData="M16,14 L32,14 L29.5,34 L18.5,34 Z"
         android:fillColor="#00000000"
@@ -17,6 +39,7 @@
         android:strokeWidth="2"
         android:strokeLineJoin="round" />
 
+    <!-- толстое дно стопки -->
     <path
         android:pathData="M18.5,34 L29.5,34 L29,37 L19,37 Z"
         android:fillColor="#00000000"
@@ -24,6 +47,7 @@
         android:strokeWidth="2"
         android:strokeLineJoin="round" />
 
+    <!-- линия уровня напитка: акцентная полоска у края -->
     <path
         android:pathData="M19.5,20 L28.5,20"
         android:strokeColor="#E0A030"

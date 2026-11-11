@@ -1,8 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--
+        Все тексты интерфейса живут здесь, в strings.xml, а не написаны прямо в коде.
+        Так их можно перевести на другие языки, проще найти и поправить, и они не
+        расползаются по десятку мест. В коде строка берётся по имени:
+        getString(R.string.menu_settings).
+        Плейсхолдеры: %1$s — первая подставленная строка, %2$s — вторая, %1$d —
+        первое целое число. Номер аргумента и его тип (s или d) указаны явно, чтобы
+        переводчик мог переставить аргументы местами и ничего не сломать.
+        Символ % служебный: если строке передают аргументы и она проходит через
+        String.format, знак процента пишется как %%. В строке без аргументов
+        достаточно одного % — она выводится как есть.
+    -->
+    <!-- app_name — имя приложения: подпись под иконкой и заголовок окна в списке задач. -->
     <string name="app_name">АлкоМетр</string>
 
     <!-- Верхняя панель -->
+    <!-- Меню в шапке экрана. Подписи короткие, потому что панель узкая; back лежит
+         здесь, хотя нужен нескольким экранам сразу. -->
     <string name="menu_settings">Настройки</string>
     <string name="menu_clear_session">Обнулить сессию</string>
     <string name="menu_history">История</string>
@@ -11,6 +26,8 @@
     <string name="back">Назад</string>
 
     <!-- Статус -->
+    <!-- Главный экран. Подставляемые части приходят уже готовыми строками
+         (время, интервал, название степени), поэтому в шаблонах только %1$s и %2$s. -->
     <string name="status_can_drive">Можно за руль</string>
     <string name="status_drive_in">За руль через %1$s · около %2$s</string>
     <string name="status_peak_past">Пик %1$s был в %2$s</string>
@@ -19,6 +36,9 @@
     <string name="status_danger">Опасная зона: риск для жизни. Звони 112</string>
 
     <!-- Степени опьянения -->
+    <!-- level_* — название степени, level_*_hint — пояснение под ним.
+         level_content_description озвучивает TalkBack: без него незрячий
+         пользователь услышит только число шкалы. -->
     <string name="level_sober">Трезв</string>
     <string name="level_mild">Лёгкое опьянение</string>
     <string name="level_moderate">Среднее опьянение</string>
@@ -32,19 +52,30 @@
     <string name="level_content_description">Степень опьянения: %1$s</string>
 
     <!-- Напитки -->
+    <!-- Пресеты сосудов для главного экрана: объём и крепость подставляются в
+         drink_caption в том же порядке, в каком показываются. -->
     <string name="drink_shot">Стопка</string>
     <string name="drink_wine">Бокал</string>
     <string name="drink_mug">Кружка</string>
     <string name="drink_custom">Свой</string>
     <string name="drink_add_custom">+ Свой</string>
+    <!-- %% — экранированный знак процента: строке передают аргументы, и одиночный %
+         String.format принял бы за начало плейсхолдера. -->
     <string name="drink_caption">%1$s мл · %2$s %%</string>
+    <!-- Короткая всплывающая подпись после нажатия на сосуд: сколько промилле
+         добавила порция. %1$s — уже отформатированное число, а знак + и ‰ входят
+         в сам шаблон. -->
     <string name="drink_added">+%1$s ‰</string>
+    <!-- То же событие для TalkBack: проговаривается, что именно добавлено, потому
+         что одно число без названия порции ничего не говорит. -->
     <string name="drink_added_content_description">Добавлена порция: %1$s</string>
     <string name="drink_last">%1$s · %2$s %3$s мл · %4$s %%</string>
     <string name="undo">Отменить</string>
     <string name="drinks_empty_hint">Нажмите на сосуд, когда выпьете порцию</string>
 
     <!-- Диалог своей порции -->
+    <!-- Общие кнопки (Отмена, Сохранить, Удалить) и тексты ошибок лежат здесь, а не
+         в группе "Настройки": их показывает и этот диалог, и экран настроек. -->
     <string name="custom_title">Своя порция</string>
     <string name="custom_volume">Объём, мл</string>
     <string name="custom_abv">Крепость, %</string>
@@ -55,16 +86,23 @@
     <string name="cancel">Отмена</string>
     <string name="save">Сохранить</string>
     <string name="delete">Удалить</string>
+    <!-- Границы в тексте должны совпадать с проверкой в коде: меняя допустимый
+         диапазон, поправьте и подсказку, иначе человек увидит неверное число. -->
     <string name="error_volume">Объём должен быть от 10 до 2000 мл</string>
     <string name="error_abv">Крепость должна быть от 0,1 до 96 %</string>
     <string name="error_weight">Вес должен быть от 30 до 200 кг</string>
 
     <!-- Шкала времени -->
+    <!-- График уровня алкоголя. timeline_scrub_* — карточка под пальцем при
+         перетаскивании: значения идут через разделитель, чтобы в переводе можно
+         было поменять их порядок. -->
     <string name="timeline_title">Уровень алкоголя по времени</string>
     <string name="timeline_now">сейчас</string>
     <string name="timeline_threshold">порог %1$s</string>
     <string name="timeline_drive_at">За руль: с %1$s · через %2$s</string>
     <string name="timeline_drive_now">За руль можно сейчас</string>
+    <!-- Прогноз строится не дальше суток, поэтому вместо времени показываем
+         честное "неизвестно", а не выдуманную дату. -->
     <string name="timeline_drive_unknown">Прогноз дальше 24 часов не строится</string>
     <string name="timeline_scrub_card">%1$s · %2$s · %3$s</string>
     <string name="timeline_scrub_past">%1$s · %2$s · %3$s · было</string>
@@ -80,6 +118,9 @@
     <string name="timeline_drink_item">%1$s · %2$s · %3$s мл · %4$s %%</string>
 
     <!-- Настройки -->
+    <!-- Самая большая группа: профиль, напитки, модель расчёта, порог, единицы и
+         данные. Пояснения settings_sex_hint и settings_advanced_hint нужны, чтобы
+         человек понимал, зачем параметр и чем опасны ручные значения. -->
     <string name="settings_title">Настройки</string>
     <string name="settings_profile">Профиль</string>
     <string name="settings_weight">Вес, кг</string>
@@ -120,9 +161,13 @@
     <string name="settings_threshold_usa">США 0,8 ‰</string>
     <string name="settings_threshold_zero">Нулевая толерантность</string>
     <string name="settings_threshold_custom">Свой</string>
+    <!-- Приложение не юридический источник: норма зависит от страны и меняется,
+         поэтому рядом с порогом стоит напоминание проверить её самостоятельно. -->
     <string name="settings_threshold_warning">Порог для вождения зависит от страны и меняется — проверьте актуальную норму.</string>
     <string name="settings_units">Единицы отображения</string>
     <string name="settings_units_permille">‰ (промилле)</string>
+    <!-- Здесь одиночный % безопасен: строке не передают аргументов, она выводится
+         как есть. Понадобится форматирование — понадобится %%. -->
     <string name="settings_units_percent">% (проценты)</string>
     <string name="settings_units_mg_100">мг/100 мл</string>
     <string name="settings_units_mg_l">мг/л</string>
@@ -134,7 +179,11 @@
     <string name="settings_about">О приложении</string>
     <string name="settings_version">Версия %1$s</string>
     <string name="settings_repository">Репозиторий проекта</string>
+    <!-- Ссылку не переводят, поэтому translatable="false": так она не попадает в
+         файлы переводов и переводчик не сможет её случайно испортить. -->
     <string name="settings_repository_url" translatable="false">https://github.com/alexazver-jpg/alkometr</string>
+    <!-- Только заголовок раздела: сам текст — disclaimer_text в группе "О программе",
+         один и тот же для настроек и для экрана "О программе". -->
     <string name="settings_disclaimer">Дисклеймер</string>
     <string name="settings_saved">Сохранено</string>
     <string name="settings_export_done">Файл резервной копии сохранён</string>
@@ -146,6 +195,8 @@
     <string name="confirm">Подтвердить</string>
 
     <!-- Онбординг -->
+    <!-- Первый запуск: по экрану на параметр. onboarding_step показывает прогресс,
+         %1$d и %2$d — целые числа (текущий шаг и всего шагов). -->
     <string name="onboarding_weight_title">Ваш вес</string>
     <string name="onboarding_weight_text">Вес определяет объём распределения алкоголя в организме. Это главный параметр расчёта.</string>
     <string name="onboarding_sex_title">Пол</string>
@@ -158,6 +209,8 @@
     <string name="onboarding_step">Шаг %1$d из %2$d</string>
 
     <!-- История -->
+    <!-- Список порций за последние 7 дней; history_range_hint честно говорит, что
+         глубже история не показывается. -->
     <string name="history_title">История</string>
     <string name="history_empty">За последние 7 дней порций нет</string>
     <string name="history_add_past">Добавить за прошлое время</string>
@@ -168,15 +221,25 @@
     <string name="history_range_hint">Показаны порции за последние 7 дней</string>
 
     <!-- О программе -->
+    <!-- Тексты экрана "О программе" и дисклеймер. -->
     <string name="about_title">О программе</string>
     <string name="about_text">«АлкоМетр» — офлайновый расчётный трекер уровня алкоголя в крови. Приложение не измеряет алкоголь, а моделирует его по выпитому: всасывание первого порядка и выведение по Михаэлису–Ментену. Все данные остаются на устройстве, сетевых разрешений нет.</string>
     <string name="about_algorithm">Как считается</string>
+    <!-- Формула записана символами латиницей, как в коде и литературе: такие
+         обозначения не переводят, иначе расчёт перестанет быть узнаваемым. -->
     <string name="about_algorithm_text">C(t) — концентрация в г/л (это же промилле). D = V × (ABV/100) × 0,789 г. Vd = r × вес. Всасывание: da/dt = −ka·a. Выведение: dC/dt = input/Vd − Vmax·C/(Km+C). Шаг интегрирования — 1 минута, горизонт прогноза — 24 часа.</string>
     <string name="disclaimer_title">Важно понимать</string>
+    <!-- Самый важный текст приложения: это оценка, а не медицинское измерение, и
+         не доказательство в спорах. Не сокращайте его при переводе и не дробите на
+         части — предупреждение должно читаться целиком, вместе с советом звонить 112
+         при тяжёлом опьянении. -->
     <string name="disclaimer_text">«АлкоМетр» рассчитывает уровень алкоголя по формуле Видмарка и средней скорости метаболизма. Это приблизительная оценка, а не медицинское измерение. Индивидуальные отклонения достигают 30 %. Приложение не заменяет алкотестер и не является доказательством в спорах. Никогда не садитесь за руль после алкоголя, даже если приложение показывает допустимое значение. При признаках тяжёлого опьянения (потеря сознания, рвота, холодная кожа) — зовите скорую (112).</string>
     <string name="close">Закрыть</string>
 
     <!-- Общее -->
+    <!-- Универсальные склейки. value_with_unit собирает "число + единица" в том
+         порядке, который принят в языке, поэтому не склеивайте их в коде строкой:
+         в других языках порядок другой. -->
     <string name="value_with_unit">%1$s %2$s</string>
     <string name="clock_at">в %1$s</string>
 </resources>

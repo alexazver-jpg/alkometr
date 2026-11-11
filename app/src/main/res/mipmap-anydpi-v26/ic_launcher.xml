@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    adaptive-icon — адаптивная иконка Android 8.0+: система сама вырезает из неё
+    круг, квадрат со скруглением или другую маску, принятую на устройстве.
+
+    background — нижний слой, здесь сплошной цвет из colors.xml (ссылка @color/...).
+    foreground — верхний слой; это VectorDrawable ic_launcher_foreground, нарисованный
+    на холсте 108 × 108 единиц viewport, поэтому важные детали держат в центре,
+    а края могут обрезаться.
+    monochrome — слой для тематических иконок Android 13+: система перекрашивает его
+    в один цвет. Здесь взята та же векторная картинка.
+
+    pathData, fillColor и strokeWidth в этом файле не встречаются: он только собирает
+    слои, а сам рисунок лежит в drawable/ic_launcher_foreground.xml.
+-->
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Фон иконки: сплошной тёмный цвет. -->
     <background android:drawable="@color/ic_launcher_background" />
+    <!-- Передний план: векторный бокал поверх фона. -->
     <foreground android:drawable="@drawable/ic_launcher_foreground" />
+    <!-- Одноцветный вариант для тематических иконок. -->
     <monochrome android:drawable="@drawable/ic_launcher_foreground" />
 </adaptive-icon>

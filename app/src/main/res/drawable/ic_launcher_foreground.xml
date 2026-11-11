@@ -5,6 +5,27 @@
     android:viewportWidth="108"
     android:viewportHeight="108">
 
+    <!--
+        Как читать этот файл.
+        VectorDrawable — векторная картинка: Android рисует её по математическим командам,
+        а не по пикселям, поэтому она остаётся чёткой на любом экране и в любом размере.
+
+        width / height — 108dp: это холст адаптивной иконки, из него система берёт
+        центральную часть, а края может обрезать под свою форму.
+        viewportWidth / viewportHeight — внутренняя сетка координат 108 × 108,
+        в которой записан рисунок; на экран она масштабируется целиком.
+        pathData — команды контура: M — поставить перо в точку, L — линия к точке,
+        C и Q — кривые, Z — замкнуть контур.
+        fillColor — заливка внутри контура; запись #AARRGGBB: первые две цифры — прозрачность
+        (00 — прозрачно, FF — плотно), остальные шесть — цвет. #00000000 значит «без заливки».
+        strokeColor — цвет обводки, strokeWidth — её толщина в единицах viewport,
+        strokeLineCap / strokeLineJoin — форма концов и стыков.
+        group — контейнер: rotation поворачивает фигуры на угол в градусах вокруг точки
+        pivotX / pivotY, при этом их pathData не меняются; здесь группа не понадобилась.
+
+        Ниже — бокал с лицом: по одной детали на каждый path.
+    -->
+
     <!-- бокал -->
     <path
         android:pathData="M38,32 L70,32 L64,78 L44,78 Z"
@@ -20,6 +41,7 @@
 
     <!-- глаза -->
     <path android:pathData="M45,53 L51,53" android:strokeColor="#1B1D21" android:strokeWidth="3" android:strokeLineCap="round" />
+    <!-- правый глаз: вторая чёрточка -->
     <path android:pathData="M57,53 L63,53" android:strokeColor="#1B1D21" android:strokeWidth="3" android:strokeLineCap="round" />
 
     <!-- улыбка -->
