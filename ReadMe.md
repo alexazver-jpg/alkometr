@@ -77,6 +77,19 @@ adb install -r app/build/outputs/apk/debug/app-debug.apk
 `dist\alkometr-0.1.0-debug.apk`. Проверка `tools\check_apk.ps1` — 18 из 18 пунктов `[OK]`;
 протокол — [`docs/verification.md`](docs/verification.md).
 
+Release-сборка подписывается отдельным ключом, который лежит **вне репозитория**
+(`%USERPROFILE%\.alkometr\keys`):
+
+```powershell
+gradlew.bat :app:assembleRelease
+# APK: app/build/outputs/apk/release/app-release.apk
+```
+
+Размер release-APK — **8,9 МБ** (9 337 824 байта), подпись `CN=Alkometr`. Готовая копия:
+`dist\alkometr-0.1.0-release.apk`. Проверка: `tools\check_apk.ps1 -Apk <путь> -Release`.
+
+Подробная инструкция для новичка — [`docs/СБОРКА.md`](docs/СБОРКА.md): Android Studio, SDK 37,
+создание и резервное копирование ключа, частые ошибки.
 ## Как считается
 
 `C(t)` — концентрация в г/л (численно равно промилле). Масса спирта `D = V × (ABV/100) × 0,789 г`,
@@ -163,6 +176,7 @@ powershell -File tools\check_apk.ps1      # проверки APK без устр
 6. Никаких сетевых разрешений, аналитики, рекламы и сторонних иконок: все иконки — собственные
    VectorDrawable в `res/drawable`.
 7. Ключи и `local.properties` в репозиторий не попадают.
+8. Release-ключ и пароли лежат в `%USERPROFILE%\.alkometr\keys`; их нельзя коммитить, а папку нужно сохранить в резервной копии — потеря ключа не даст выпустить обновление.
 
 ## Отклонения от ТЗ
 
@@ -212,6 +226,7 @@ remote — `origin` (`https://github.com/alexazver-jpg/alkometr.git`).
   порций в диалоге, рост и возраст в профиле, ссылка на репозиторий в «О приложении» и скрипт
   публикации.
   Номер версии и `versionCode` не менялись — APK пересобран из того же `0.1.0` (1).
+* **0.1.0, release (11.11.2026)** — подписанный release-APK (8,9 МБ), отдельный ключ вне репозитория, инструкция docs/СБОРКА.md.
 * Локальный git-архив: `E:\ProectsAutoClaw\АлкоМетр\` (папки `Программа`, `Документы`, `Тесты`,
   `Инструменты`; скрипт `Сохранить версию.cmd`).
 * **11.11.2026, публикация** — приватный репозиторий

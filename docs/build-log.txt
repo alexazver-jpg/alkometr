@@ -1,3 +1,7 @@
+
+> Configure project :app
+ALKOMETR keystore: file=C:\Users\user\.alkometr\keys\keystore.properties exists=true
+
 > Task :app:preBuild UP-TO-DATE
 > Task :app:preDebugBuild UP-TO-DATE
 > Task :app:generateDebugResources UP-TO-DATE
@@ -21,13 +25,13 @@
 > Task :app:bundleDebugClassesToRuntimeJar UP-TO-DATE
 > Task :app:bundleDebugClassesToCompileJar UP-TO-DATE
 > Task :app:preDebugUnitTestBuild UP-TO-DATE
+> Task :app:compileDebugUnitTestKotlin UP-TO-DATE
 > Task :app:javaPreCompileDebugUnitTest UP-TO-DATE
-> Task :app:compressDebugJavaRes UP-TO-DATE
-> Task :app:compileDebugUnitTestKotlin
 > Task :app:compileDebugUnitTestJavaWithJavac NO-SOURCE
+> Task :app:compressDebugJavaRes UP-TO-DATE
 > Task :app:compressDebugUnitTestJavaRes UP-TO-DATE
 > Task :app:extractDebugUnitTestJavaRes UP-TO-DATE
-> Task :app:testDebugUnitTest
+> Task :app:testDebugUnitTest UP-TO-DATE
 
 [Incubating] Problems report is available at: file:///C:/Users/user/AppData/Roaming/AutoClaw-oversea-official/accounts/6661d600f597f616562ec1e0f34de23e3ca7f708dea2755cf1d8e17088b60bb3/projects/Default/alkometr/build/reports/problems/problems-report.html
 
@@ -37,6 +41,6 @@ You can use '--warning-mode all' to show the individual deprecation warnings and
 
 For more on this, please refer to https://docs.gradle.org/9.8.2/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
 
-BUILD SUCCESSFUL in 3s
-25 actionable tasks: 2 executed, 23 up-to-date
+BUILD SUCCESSFUL in 1s
+25 actionable tasks: 25 up-to-date
 Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.8.2/userguide/configuration_cache_enabling.html

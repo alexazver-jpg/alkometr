@@ -1,7 +1,8 @@
 # Checks the built APK without a device: manifest, permissions, resources, signature.
 # Usage: powershell -ExecutionPolicy Bypass -File tools\check_apk.ps1 [-Apk <path>]
 param(
-    [string]$Apk = ''
+    [string]$Apk = '',
+    [switch]$Release
 )
 
 $ErrorActionPreference = 'Stop'
@@ -48,7 +49,11 @@ foreach ($icon in @('ic_level_1', 'ic_level_2', 'ic_level_3', 'ic_level_4', 'ic_
 
 $verified = & $apksigner verify --print-certs $Apk 2>&1 | Out-String
 Check 'APK signature valid' ($LASTEXITCODE -eq 0)
-Check 'Signed with debug key' ($verified -match 'CN=Android Debug')
+if ($Release) {
+    Check 'Signed with release key' ($verified -match 'CN=Alkometr')
+} else {
+    Check 'Signed with debug key' ($verified -match 'CN=Android Debug')
+}
 
 Write-Host ''
 if ($script:failed -eq 0) {

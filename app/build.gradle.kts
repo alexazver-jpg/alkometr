@@ -1,3 +1,5 @@
+import java.io.File
+import java.util.Properties
 // Build-скрипт модуля app — единственного модуля приложения.
 // Здесь описано, как именно собрать APK: под какое SDK, с какими зависимостями.
 // Все версии берутся из gradle/libs.versions.toml через alias(...) и libs.*.
@@ -11,6 +13,18 @@ plugins { // Плагины этого модуля: они и включают 
     alias(libs.plugins.kotlin.serialization)
 }
 
+// --- Release-подпись -------------------------------------------------------
+// Путь к ключу и пароли лежат ВНЕ репозитория: ~/.alkometr/keys/keystore.properties.
+// В git ни этот файл, ни *.jks не попадают, поэтому папку ~/.alkometr/keys нужно
+// сохранить в надёжном месте: потеря ключа = невозможность обновить приложение.
+val keystorePropertiesFile = File(System.getProperty("user.home"), ".alkometr/keys/keystore.properties")
+val keystoreProperties = Properties().apply {
+    println("ALKOMETR keystore: file=" + keystorePropertiesFile.absolutePath + " exists=" + keystorePropertiesFile.isFile)
+    // Если файла нет, release-сборка просто останется неподписанной (debug это не затрагивает).
+    if (keystorePropertiesFile.isFile) {
+        keystorePropertiesFile.inputStream().use { load(it) }
+    }
+}
 android { // Блок настроек Android-плагина: всё, что относится к Android-сборке.
     namespace = "ru.alkometr.app" // Пакет, в котором генерируются R (ресурсы) и BuildConfig;
     // он же используется как база для относительных имён классов в манифесте (".MainActivity").
@@ -35,6 +49,29 @@ android { // Блок настроек Android-плагина: всё, что о
     compileOptions { // Параметры компиляции Java-байткода.
         sourceCompatibility = JavaVersion.VERSION_17 // Языковой уровень исходников — Java 17.
         targetCompatibility = JavaVersion.VERSION_17 // Уровень байткода на выходе — тоже Java 17.
+    }
+
+    signingConfigs { // Настройки подписи APK.
+        // Создаём release-подпись только если найден файл с ключом и паролями.
+        if (keystoreProperties.isNotEmpty()) {
+            create("release") {
+                storeFile = File(keystoreProperties.getProperty("storeFile")) // путь к .jks
+                storePassword = keystoreProperties.getProperty("storePassword") // пароль хранилища
+                keyAlias = keystoreProperties.getProperty("keyAlias") // имя ключа внутри хранилища
+                keyPassword = keystoreProperties.getProperty("keyPassword") // пароль самого ключа
+            }
+        }
+    }
+
+    buildTypes { // Варианты сборки.
+        release { // Release: оптимизированный APK для установки пользователям.
+            isMinifyEnabled = false // R8/ProGuard не включаем: проект небольшой, отладка проще.
+            isShrinkResources = false // Ресурсы не удаляем, чтобы ничего не сломать случайно.
+            // Подписываем release-ключом, если он настроен; иначе APK останется неподписанным.
+            if (keystoreProperties.isNotEmpty()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
+        }
     }
 }
 

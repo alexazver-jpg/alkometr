@@ -64,3 +64,13 @@
   APK (на машине активны одновременно WHPX и драйверы VMware Workstation 15.5.6; разбор причин
   синих экранов — в `docs/ОТЧЁТ.md`). Скриншоты в `docs/screenshots/` относятся к предыдущей
   сборке и показывают интерфейс до правок вёрстки.
+## Release-сборка (11.11.2026)
+
+| Параметр | Значение |
+|---|---|
+| Команда | `gradlew.bat :app:assembleRelease` |
+| Файл | `app\build\outputs\apk\release\app-release.apk` → копия `dist\alkometr-0.1.0-release.apk` |
+| Размер | 9 337 824 байт = 8,91 МиБ |
+| Подпись | собственный ключ `CN=Alkometr` (PKCS12, RSA 2048), `apksigner verify` — валидна |
+| Проверки | `tools\check_apk.ps1 -Release` — все пункты `[OK]`, INTERNET нет |
+| Ключ | `%USERPROFILE%\.alkometr\keys` — вне репозитория, в git не попадает |

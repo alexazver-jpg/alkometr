@@ -12,3 +12,5 @@ local.properties
 *.keystore
 !tools/debug.keystore
 dist/*.apk
+keystore.properties
+
