@@ -74,3 +74,4 @@
 | Подпись | собственный ключ `CN=Alkometr` (PKCS12, RSA 2048), `apksigner verify` — валидна |
 | Проверки | `tools\check_apk.ps1 -Release` — все пункты `[OK]`, INTERNET нет |
 | Ключ | `%USERPROFILE%\.alkometr\keys` — вне репозитория, в git не попадает |
+| Release | https://github.com/alexazver-jpg/alkometr/releases/tag/v0.1.0 — APK 9 337 824 Б, SHA-256 `6e561f21…bf8ea` |
