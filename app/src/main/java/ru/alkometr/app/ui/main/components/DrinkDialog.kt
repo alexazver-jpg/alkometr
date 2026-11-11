@@ -29,9 +29,18 @@ import ru.alkometr.app.core.format.Formatters
 import ru.alkometr.app.core.model.DrinkKind
 import java.util.Calendar
 
+/** То, что пользователь ввёл в диалоге порции. */
+data class DrinkDraft(
+    val name: String?,
+    val volumeMl: Double,
+    val abvPercent: Double,
+    val kind: DrinkKind,
+    val atMillis: Long,
+)
+
 /**
  * Диалог порции: объём, крепость, вид сосуда и (опционально) время.
- * Используется и для «+ Свой», и для правки пресета, и для добавления задним числом.
+ * В режиме пресета добавляется необязательное название.
  */
 @Composable
 fun DrinkDialog(
@@ -43,17 +52,20 @@ fun DrinkDialog(
     allowTime: Boolean,
     confirmText: String,
     onDismiss: () -> Unit,
-    onConfirm: (volumeMl: Double, abvPercent: Double, kind: DrinkKind, atMillis: Long) -> Unit,
+    allowName: Boolean = false,
+    initialName: String? = null,
+    onConfirm: (DrinkDraft) -> Unit,
 ) {
     var volumeText by remember { mutableStateOf(Formatters.formatVolume(initialVolumeMl)) }
     var abvText by remember { mutableStateOf(Formatters.formatVolume(initialAbvPercent)) }
+    var nameText by remember { mutableStateOf(initialName.orEmpty()) }
     var kind by remember { mutableStateOf(initialKind) }
     var atMillis by remember { mutableStateOf(initialAtMillis) }
 
     val volume = volumeText.replace(',', '.').toDoubleOrNull()
     val abv = abvText.replace(',', '.').toDoubleOrNull()
     val volumeError = volume == null || volume !in 10.0..2000.0
-    val abvError = abv == null || abv !in 0.0..96.0
+    val abvError = abv == null || abv !in 0.1..96.0
     val valid = !volumeError && !abvError
 
     val context = LocalContext.current
@@ -87,6 +99,15 @@ fun DrinkDialog(
         title = { Text(title) },
         text = {
             Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                if (allowName) {
+                    OutlinedTextField(
+                        value = nameText,
+                        onValueChange = { nameText = it.take(40) },
+                        label = { Text(stringResource(R.string.settings_preset_name)) },
+                        singleLine = true,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     DrinkKind.entries.filter { it != DrinkKind.CUSTOM }.forEach { option ->
                         FilterChip(
@@ -150,7 +171,15 @@ fun DrinkDialog(
             TextButton(
                 onClick = {
                     if (valid) {
-                        onConfirm(volume!!, abv!!, kind, atMillis)
+                        onConfirm(
+                            DrinkDraft(
+                                name = nameText.trim().takeIf { it.isNotEmpty() },
+                                volumeMl = volume!!,
+                                abvPercent = abv!!,
+                                kind = kind,
+                                atMillis = atMillis,
+                            ),
+                        )
                     }
                 },
                 enabled = valid,

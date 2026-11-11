@@ -56,7 +56,7 @@
     <string name="save">Сохранить</string>
     <string name="delete">Удалить</string>
     <string name="error_volume">Объём должен быть от 10 до 2000 мл</string>
-    <string name="error_abv">Крепость должна быть от 0 до 96 %</string>
+    <string name="error_abv">Крепость должна быть от 0,1 до 96 %</string>
     <string name="error_weight">Вес должен быть от 30 до 200 кг</string>
 
     <!-- Шкала времени -->
@@ -95,6 +95,7 @@
     <string name="settings_add_preset">Добавить пресет</string>
     <string name="settings_edit_preset">Пресет напитка</string>
     <string name="settings_edit">Изменить</string>
+    <string name="settings_preset_name">Название (необязательно)</string>
     <string name="settings_preset_name_kind">Сосуд</string>
     <string name="settings_model">Модель расчёта</string>
     <string name="settings_food">Приём пищи</string>
@@ -133,6 +134,7 @@
     <string name="settings_about">О приложении</string>
     <string name="settings_version">Версия %1$s</string>
     <string name="settings_repository">Репозиторий проекта</string>
+    <string name="settings_repository_url" translatable="false"></string>
     <string name="settings_disclaimer">Дисклеймер</string>
     <string name="settings_saved">Сохранено</string>
     <string name="settings_export_done">Файл резервной копии сохранён</string>

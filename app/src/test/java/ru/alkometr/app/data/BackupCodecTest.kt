@@ -23,7 +23,7 @@ class BackupCodecTest {
         thresholdPermille = 0.5,
         units = Units.PERCENT,
         onboardingDone = true,
-        presets = DrinkPreset.defaults() + DrinkPreset("custom", DrinkKind.CUSTOM, 330.0, 4.5),
+        presets = DrinkPreset.defaults() + DrinkPreset("custom", DrinkKind.CUSTOM, 330.0, 4.5, name = "Стаут 0,33"),
     )
 
     private val drinks = listOf(

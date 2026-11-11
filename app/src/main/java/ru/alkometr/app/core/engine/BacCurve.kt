@@ -46,6 +46,17 @@ class BacCurve(private val points: List<CurvePoint>) {
         return left.bacGPerL + (right.bacGPerL - left.bacGPerL) * k
     }
 
+    /**
+     * Первая точка после [afterMillis], где концентрация не выше [threshold].
+     * Нужна для прогноза «за руль через…» по уже построенной кривой, без повторного интегрирования.
+     */
+    fun firstBelow(threshold: Double, afterMillis: Long): Long? {
+        if (points.isEmpty()) return null
+        // Ищем только на спаде: до пика кривая может пересечь порог на подъёме, это не «стало можно».
+        val from = maxOf(afterMillis, peak().atMillis)
+        return points.firstOrNull { it.atMillis > from && it.bacGPerL <= threshold }?.atMillis
+    }
+
     companion object {
         fun of(points: List<CurvePoint>): BacCurve = BacCurve(points)
     }

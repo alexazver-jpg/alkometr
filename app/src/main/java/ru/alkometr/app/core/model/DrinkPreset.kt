@@ -12,6 +12,8 @@ data class DrinkPreset(
     val kind: DrinkKind,
     val volumeMl: Double,
     val abvPercent: Double,
+    /** Необязательное своё название; если пусто — на кнопке показывается вид сосуда. */
+    val name: String? = null,
 ) {
     companion object {
         fun defaults(): List<DrinkPreset> = listOf(

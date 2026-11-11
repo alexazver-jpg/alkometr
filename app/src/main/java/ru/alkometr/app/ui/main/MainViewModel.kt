@@ -4,22 +4,20 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.delay
 import ru.alkometr.app.AlkometrApp
 import ru.alkometr.app.core.engine.BacCurve
 import ru.alkometr.app.core.engine.BacEngine
 import ru.alkometr.app.core.engine.DriveForecast
 import ru.alkometr.app.core.engine.PeakInfo
-import ru.alkometr.app.core.engine.TimeToDrive
 import ru.alkometr.app.core.model.AppSettings
 import ru.alkometr.app.core.model.Drink
 import ru.alkometr.app.core.model.DrinkKind
@@ -51,6 +49,13 @@ data class MainUiState(
         get() = drinks.maxByOrNull { it.atMillis }
 }
 
+/**
+ * Состояние экрана собирается в два слоя:
+ *  - тяжёлый слой (кривая, пик) пересчитывается только при изменении порций или настроек
+ *    и раз в 5 минут, чтобы окно не устаревало;
+ *  - лёгкий слой (текущее время, уровень, остаток) обновляется раз в секунду
+ *    и читает значение из уже готовой кривой.
+ */
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val app = AlkometrApp.from(application)
@@ -59,6 +64,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val lastAddedId = MutableStateFlow<String?>(null)
 
+    /** Тикер «сейчас»: раз в секунду, без пересчёта кривой. */
     private val ticker = flow {
         while (true) {
             emit(System.currentTimeMillis())
@@ -66,47 +72,89 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    val uiState: StateFlow<MainUiState> = combine(
+    /** Редкий тикер, который обновляет окно кривой и прогноз, если приложение открыто долго. */
+    private val heavyTicker = flow {
+        while (true) {
+            emit(System.currentTimeMillis())
+            delay(HEAVY_REFRESH_MILLIS)
+        }
+    }
+
+    private data class HeavyState(
+        val settings: AppSettings,
+        val drinks: List<Drink>,
+        val curve: BacCurve,
+        val peak: PeakInfo,
+        val startMillis: Long,
+        val endMillis: Long,
+    )
+
+    private val heavyState: Flow<HeavyState> = combine(
         settingsRepository.settings,
         drinksRepository.drinks,
-        ticker,
+        heavyTicker,
     ) { settings, drinks, now ->
-        buildState(settings, drinks, now)
-    }.flowOn(Dispatchers.Default).stateIn(
+        buildHeavyState(settings, drinks, now)
+    }
+
+    val uiState: StateFlow<MainUiState> = combine(
+        heavyState,
+        ticker,
+        lastAddedId,
+    ) { heavy, now, addedId ->
+        buildUiState(heavy, now, addedId)
+    }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000L),
         initialValue = MainUiState(),
     )
 
-    private fun buildState(settings: AppSettings, drinks: List<Drink>, now: Long): MainUiState {
+    private fun buildHeavyState(settings: AppSettings, drinks: List<Drink>, now: Long): HeavyState {
         val params = settings.modelParams
         val firstDrink = drinks.minOfOrNull { it.atMillis }
-        // Порции старше 24 ч на модель не влияют (BacEngine), поэтому окно кривой не растягиваем на всю историю.
-        val curveStart = if (firstDrink == null) now - 6 * HOUR else {
-            maxOf(minOf(firstDrink, now) - 30 * MINUTE, now - BacEngine.HORIZON_MILLIS)
-        }
+        val curveStart = if (firstDrink == null) now - 6 * HOUR else minOf(firstDrink, now) - 30 * MINUTE
         val curveEnd = if (firstDrink == null) now + 6 * HOUR else maxOf(firstDrink, now) + 24 * HOUR
 
-        val points = BacEngine.curve(drinks, params, curveStart, curveEnd)
-        val curve = BacCurve.of(points)
-        val bacNow = if (drinks.isEmpty()) 0.0 else curve.valueAt(now)
-        val peak = curve.peak()
-        val forecast = TimeToDrive.forecast(drinks, params, now, settings.thresholdPermille)
+        val curve = BacCurve.of(BacEngine.curve(drinks, params, curveStart, curveEnd))
+        return HeavyState(
+            settings = settings,
+            drinks = drinks,
+            curve = curve,
+            peak = curve.peak(),
+            startMillis = curveStart,
+            endMillis = curveEnd,
+        )
+    }
+
+    private fun buildUiState(heavy: HeavyState, now: Long, addedId: String?): MainUiState {
+        val settings = heavy.settings
+        val threshold = settings.thresholdPermille
+        val bacNow = if (heavy.drinks.isEmpty()) 0.0 else heavy.curve.valueAt(now)
+
+        val canDriveNow = bacNow <= threshold
+        val readyAt = if (canDriveNow) null else heavy.curve.firstBelow(threshold, now)
+        val forecast = DriveForecast(
+            bacNow = bacNow,
+            thresholdGPerL = threshold,
+            canDriveNow = canDriveNow,
+            readyAtMillis = readyAt,
+            remainingMillis = readyAt?.let { it - now },
+        )
 
         return MainUiState(
             loading = false,
             settings = settings,
-            drinks = drinks,
+            drinks = heavy.drinks,
             nowMillis = now,
             bacNow = bacNow,
             level = IntoxicationLevel.forBac(bacNow),
-            peak = peak,
-            peakAhead = peak.atMillis > now + MINUTE,
+            peak = heavy.peak,
+            peakAhead = heavy.peak.atMillis > now + MINUTE,
             forecast = forecast,
-            curve = curve,
-            curveStartMillis = curveStart,
-            curveEndMillis = curveEnd,
-            lastAddedId = lastAddedId.value,
+            curve = heavy.curve,
+            curveStartMillis = heavy.startMillis,
+            curveEndMillis = heavy.endMillis,
+            lastAddedId = addedId,
         )
     }
 
@@ -217,5 +265,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private companion object {
         const val MINUTE = 60_000L
         const val HOUR = 60 * MINUTE
+        const val HEAVY_REFRESH_MILLIS = 5 * MINUTE
     }
 }

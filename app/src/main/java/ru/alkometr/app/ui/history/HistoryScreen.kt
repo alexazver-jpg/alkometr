@@ -140,9 +140,9 @@ fun HistoryScreen(
             allowTime = true,
             confirmText = stringResource(R.string.custom_add),
             onDismiss = { addDialog = false },
-            onConfirm = { volume, abv, kind, at ->
+            onConfirm = { draft ->
                 addDialog = false
-                onAddPast(volume, abv, kind, at)
+                onAddPast(draft.volumeMl, draft.abvPercent, draft.kind, draft.atMillis)
             },
         )
     }

@@ -87,7 +87,7 @@ fun DrinkButtons(
                     modifier = Modifier.size(30.dp),
                 )
                 Text(
-                    text = stringResource(preset.kind.titleRes()),
+                    text = preset.name?.takeIf { it.isNotBlank() } ?: stringResource(preset.kind.titleRes()),
                     style = MaterialTheme.typography.labelLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 1,

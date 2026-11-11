@@ -310,4 +310,33 @@ class BacEngineTest {
         assertTrue(sober.canDriveNow)
         assertEquals(0L, sober.remainingMillis)
     }
+
+    @Test
+    fun drinksOlderThan24HoursDoNotAffectLevel() {
+        // Порция 30 часов назад уже всосалась и вывелась: на текущий уровень она не влияет,
+        // даже если доза была очень большой.
+        val p = params(80.0, Sex.MALE)
+        val old = Drink(
+            id = "old",
+            atMillis = t0 - 30 * 60 * minute,
+            volumeMl = 1000.0,
+            abvPercent = 40.0,
+            kind = DrinkKind.CUSTOM,
+        )
+        assertEquals(0.0, BacEngine.bacAt(listOf(old), p, t0), 1e-9)
+    }
+
+    @Test
+    fun futureDrinkDoesNotRaiseCurrentLevel() {
+        val p = params(80.0, Sex.MALE)
+        val future = Drink(
+            id = "future",
+            atMillis = t0 + 60 * minute,
+            volumeMl = 500.0,
+            abvPercent = 40.0,
+            kind = DrinkKind.CUSTOM,
+        )
+        assertEquals(0.0, BacEngine.bacAt(listOf(future), p, t0), 1e-9)
+        assertTrue(BacEngine.bacAt(listOf(future), p, t0 + 90 * minute) > 0.0)
+    }
 }

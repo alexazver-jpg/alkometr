@@ -60,6 +60,7 @@ import ru.alkometr.app.core.model.Metabolism
 import ru.alkometr.app.core.model.Sex
 import ru.alkometr.app.core.model.ThresholdPreset
 import ru.alkometr.app.core.model.Units
+import ru.alkometr.app.core.model.UserProfile
 import ru.alkometr.app.data.BackupCodec
 import ru.alkometr.app.ui.main.components.DrinkDialog
 import ru.alkometr.app.ui.main.components.iconRes
@@ -215,6 +216,22 @@ fun SettingsScreen(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+                OptionalIntField(
+                    label = stringResource(R.string.settings_height),
+                    value = settings.profile.heightCm,
+                    range = UserProfile.HEIGHT_RANGE,
+                    onValueChange = { height ->
+                        onSave(settings.copy(profile = settings.profile.copy(heightCm = height)))
+                    },
+                )
+                OptionalIntField(
+                    label = stringResource(R.string.settings_age),
+                    value = settings.profile.ageYears,
+                    range = UserProfile.AGE_RANGE,
+                    onValueChange = { age ->
+                        onSave(settings.copy(profile = settings.profile.copy(ageYears = age)))
+                    },
+                )
             }
 
             // --- Напитки ---
@@ -239,7 +256,8 @@ fun SettingsScreen(
                         )
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = stringResource(preset.kind.titleRes()),
+                                text = preset.name?.takeIf { it.isNotBlank() }
+                                    ?: stringResource(preset.kind.titleRes()),
                                 style = MaterialTheme.typography.bodyMedium,
                             )
                             Text(
@@ -367,10 +385,14 @@ fun SettingsScreen(
                             onClick = { onSave(settings.copy(thresholdPermille = preset.permille)) },
                             label = {
                                 Text(
-                                    when (preset) {
-                                        ThresholdPreset.ZERO -> "0,0 ‰"
-                                        else -> Formatters.formatBac(preset.permille, Units.PERMILLE)
-                                    },
+                                    stringResource(
+                                        when (preset) {
+                                            ThresholdPreset.RUSSIA -> R.string.settings_threshold_russia
+                                            ThresholdPreset.EUROPE -> R.string.settings_threshold_europe
+                                            ThresholdPreset.USA -> R.string.settings_threshold_usa
+                                            ThresholdPreset.ZERO -> R.string.settings_threshold_zero
+                                        },
+                                    ),
                                 )
                             },
                         )
@@ -449,6 +471,13 @@ fun SettingsScreen(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 6.dp),
                 )
+                val repoUrl = stringResource(R.string.settings_repository_url)
+                if (repoUrl.isNotBlank()) {
+                    val uriHandler = androidx.compose.ui.platform.LocalUriHandler.current
+                    TextButton(onClick = { runCatching { uriHandler.openUri(repoUrl) } }) {
+                        Text(stringResource(R.string.settings_repository))
+                    }
+                }
                 TextButton(onClick = { showDisclaimer = true }) {
                     Text(stringResource(R.string.settings_disclaimer))
                 }
@@ -465,14 +494,25 @@ fun SettingsScreen(
             initialKind = preset.kind,
             initialAtMillis = System.currentTimeMillis(),
             allowTime = false,
+            allowName = true,
+            initialName = preset.name,
             confirmText = stringResource(R.string.save),
             onDismiss = { editingPreset = null },
-            onConfirm = { volume, abv, kind, _ ->
+            onConfirm = { draft ->
                 editingPreset = null
                 onSave(
                     settings.copy(
                         presets = settings.presets.map {
-                            if (it.id == preset.id) it.copy(volumeMl = volume, abvPercent = abv, kind = kind) else it
+                            if (it.id == preset.id) {
+                                it.copy(
+                                    name = draft.name,
+                                    volumeMl = draft.volumeMl,
+                                    abvPercent = draft.abvPercent,
+                                    kind = draft.kind,
+                                )
+                            } else {
+                                it
+                            }
                         },
                     ),
                 )
@@ -488,17 +528,19 @@ fun SettingsScreen(
             initialKind = DrinkKind.CUSTOM,
             initialAtMillis = System.currentTimeMillis(),
             allowTime = false,
+            allowName = true,
             confirmText = stringResource(R.string.custom_add),
             onDismiss = { newPreset = false },
-            onConfirm = { volume, abv, kind, _ ->
+            onConfirm = { draft ->
                 newPreset = false
                 onSave(
                     settings.copy(
                         presets = settings.presets + DrinkPreset(
                             id = UUID.randomUUID().toString(),
-                            kind = kind,
-                            volumeMl = volume,
-                            abvPercent = abv,
+                            kind = draft.kind,
+                            volumeMl = draft.volumeMl,
+                            abvPercent = draft.abvPercent,
+                            name = draft.name,
                         ),
                     ),
                 )
@@ -618,6 +660,34 @@ private fun NumberField(
         },
         label = { Text(label) },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth(),
+    )
+}
+
+/**
+ * Необязательное целочисленное поле: пустое значение — null, вне диапазона не сохраняется.
+ */
+@Composable
+private fun OptionalIntField(
+    label: String,
+    value: Int?,
+    range: IntRange,
+    onValueChange: (Int?) -> Unit,
+) {
+    var text by remember(value) { mutableStateOf(value?.toString() ?: "") }
+    OutlinedTextField(
+        value = text,
+        onValueChange = { input ->
+            text = input.filter { it.isDigit() }.take(3)
+            if (text.isEmpty()) {
+                onValueChange(null)
+            } else {
+                text.toIntOrNull()?.takeIf { it in range }?.let(onValueChange)
+            }
+        },
+        label = { Text(label) },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         singleLine = true,
         modifier = Modifier.fillMaxWidth(),
     )

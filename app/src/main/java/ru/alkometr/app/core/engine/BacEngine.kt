@@ -127,7 +127,7 @@ object BacEngine {
         }
         if (toMillis < simStart) return listOf(CurvePoint(toMillis, 0.0))
 
-        val validDrinks = drinks.filter { it.volumeMl > 0 && it.abvPercent > 0 }
+        val validDrinks = drinks.filter { it.volumeMl > 0 && it.abvPercent > 0 && it.atMillis >= simStart }
         val grams = DoubleArray(validDrinks.size) { validDrinks[it].ethanolGrams }
         val pending = DoubleArray(validDrinks.size)
         val added = BooleanArray(validDrinks.size)

@@ -128,7 +128,7 @@ fun MainScreen(
                     Column {
                         Text(stringResource(R.string.app_name), style = MaterialTheme.typography.titleLarge)
                         Text(
-                            text = stringResource(state.level.hintRes()),
+                            text = stringResource(state.level.titleRes()),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -174,10 +174,14 @@ fun MainScreen(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 14.dp),
+                .fillMaxSize(),
         ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 14.dp),
+            ) {
             BacGauge(
                 bac = state.bacNow,
                 level = state.level,
@@ -240,14 +244,16 @@ fun MainScreen(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            Text(
-                text = stringResource(R.string.timeline_title),
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(bottom = 4.dp),
-            )
+                Text(
+                    text = stringResource(R.string.timeline_title),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
+                )
+            }
 
             BacTimeline(
+                modifier = Modifier.padding(horizontal = 14.dp),
                 curve = state.curve,
                 drinks = state.drinks,
                 params = state.settings.modelParams,
@@ -259,7 +265,6 @@ fun MainScreen(
                 driveText = driveText,
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 
@@ -273,10 +278,10 @@ fun MainScreen(
             allowTime = true,
             confirmText = stringResource(R.string.custom_add),
             onDismiss = { customDialog = false },
-            onConfirm = { volume, abv, kind, at ->
+            onConfirm = { draft ->
                 customDialog = false
                 haptics.performHapticFeedback(HapticFeedbackType.LongPress)
-                onCustomAdd(volume, abv, kind, at)
+                onCustomAdd(draft.volumeMl, draft.abvPercent, draft.kind, draft.atMillis)
             },
         )
     }
@@ -289,11 +294,20 @@ fun MainScreen(
             initialKind = preset.kind,
             initialAtMillis = state.nowMillis,
             allowTime = false,
+            allowName = true,
+            initialName = preset.name,
             confirmText = stringResource(R.string.save),
             onDismiss = { editingPreset = null },
-            onConfirm = { volume, abv, kind, _ ->
+            onConfirm = { draft ->
                 editingPreset = null
-                onSavePreset(preset.copy(volumeMl = volume, abvPercent = abv, kind = kind))
+                onSavePreset(
+                    preset.copy(
+                        name = draft.name,
+                        volumeMl = draft.volumeMl,
+                        abvPercent = draft.abvPercent,
+                        kind = draft.kind,
+                    ),
+                )
             },
         )
     }

@@ -11,8 +11,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -506,31 +510,38 @@ fun BacTimeline(
         )
     }
     if (expandedList) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(10.dp))
-                .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
-                .padding(8.dp),
-        ) {
-            if (drinks.isEmpty()) {
-                Text(stringResource(R.string.timeline_no_drinks), style = MaterialTheme.typography.bodySmall)
-            } else {
-                drinks.sortedBy { it.atMillis }.forEach { drink ->
-                    Text(
-                        text = stringResource(
-                            R.string.timeline_drink_item,
-                            Formatters.formatDateTime(drink.atMillis),
-                            stringResource(drink.kind.titleRes()),
-                            Formatters.formatVolume(drink.volumeMl),
-                            Formatters.formatVolume(drink.abvPercent),
-                        ),
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(vertical = 2.dp),
-                    )
+        AlertDialog(
+            onDismissRequest = { expandedList = false },
+            title = { Text(stringResource(R.string.timeline_drinks_header)) },
+            text = {
+                Column(
+                    modifier = Modifier
+                        .heightIn(max = 360.dp)
+                        .verticalScroll(rememberScrollState()),
+                ) {
+                    if (drinks.isEmpty()) {
+                        Text(stringResource(R.string.timeline_no_drinks), style = MaterialTheme.typography.bodySmall)
+                    } else {
+                        drinks.sortedBy { it.atMillis }.forEach { drink ->
+                            Text(
+                                text = stringResource(
+                                    R.string.timeline_drink_item,
+                                    Formatters.formatDateTime(drink.atMillis),
+                                    stringResource(drink.kind.titleRes()),
+                                    Formatters.formatVolume(drink.volumeMl),
+                                    Formatters.formatVolume(drink.abvPercent),
+                                ),
+                                style = MaterialTheme.typography.bodySmall,
+                                modifier = Modifier.padding(vertical = 2.dp),
+                            )
+                        }
+                    }
                 }
-            }
-        }
+            },
+            confirmButton = {
+                TextButton(onClick = { expandedList = false }) { Text(stringResource(R.string.close)) }
+            },
+        )
     }
 }
 
